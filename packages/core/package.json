@@ -1,0 +1,17 @@
+{
+  "name": "@venture-studio/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": "./dist/src/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test test/core.test.ts"
+  },
+  "dependencies": {
+    "@venture-studio/contracts": "0.1.0"
+  }
+}

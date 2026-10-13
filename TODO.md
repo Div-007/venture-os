@@ -1,0 +1,662 @@
+# Venture Studio OS delivery plan
+
+Product overview: [README.md](README.md). The problem we solve: [PROBLEM_STATEMENT.md](PROBLEM_STATEMENT.md).
+
+Checkboxes are updated only after implementation and verification. Approval gates remain unchecked until the user explicitly approves them.
+
+## Phase 0 â€” Foundation
+
+- [x] Confirm product hierarchy: Workspace -> Ventures -> Groups -> Channels
+- [x] Record the agreed architecture and security boundaries
+- [x] Create the npm/TypeScript monorepo skeleton
+- [x] Seed `apps/web` from the approved AIBOS UI reference
+- [x] Install and verify the Ponytail backend skill
+- [x] Create persistent Frontend and Backend Codex tasks in the Venture Studio project
+
+## Phase 1 â€” Dashboard design prototype (approved)
+
+### 1.1 Shell and visual system
+
+- [x] Repurpose the AIBOS shell, typography, spacing, icons, surfaces, and interaction patterns
+- [x] Add Venture Studio navigation and venture/group context
+- [x] Make the dashboard responsive at desktop, tablet, and mobile widths
+
+### 1.2 Dashboard content
+
+- [x] Build a high-fidelity home/dashboard page using realistic dummy data
+- [x] Show assigned work, urgency/deadline signals, venture health, mentions, and recent activity
+- [x] Expose clear entry points for focus mode, chat/channels, and the Kanban board
+- [x] Cover empty/loading/error-like presentation states where useful for approval
+
+### 1.3 Verification and approval
+
+- [x] Run lint and production build smoke tests
+- [x] Perform a visual pass for overflow, accessibility, and responsive behavior
+- [x] Present the dashboard to the user
+- [x] **Approval gate: user approved the dashboard direction on 2026-09-23**
+
+## Phase 2 â€” Complete dummy product UI
+
+Approved on 2026-09-23. The full interface is being built against shared demo records; backend integration is tracked by contract seams and remains a separate verification gate.
+
+### 2.0 Studio command center
+
+- [x] Today, venture overview, 30-day outcomes, and weekly timeline
+- [x] Decisions register and structured questions/information requests
+- [x] Classes with objectives, applied assignments, and assessment evidence
+- [x] Venture-specific sales pipeline
+
+### 2.0a Demo-to-connected UI parity correction
+
+- [x] Reuse the demo shell for connected routes and populate its workspace, venture, task, member, and notification context from the API; verify the connected dashboard in the local authenticated browser fixture.
+- [x] Reuse the demo dashboard, Today, and Ventures presentations for connected data, with an API-backed venture creation entry point; verify routes, People tab, scoped creation drawer, and New task navigation in-browser. Venture creation was not submitted in this visual pass.
+- [x] Give connected Decisions, Classes, Timeline, and Requests distinct routes and active sidebar states; verify Decisions read in-browser.
+- [x] Align connected Sales with the demo venture tabs and stage board while retaining API-backed creation and status controls; verify the board and Add record drawer in-browser.
+- [x] Align connected Tasks search/filter row and named assignees, and group the connected Kanban board into the demo's six visual stages while preserving exact backend statuses on cards; verify live reads and task search in-browser.
+- [x] Align connected People & access Members/Structure tabs and show real member names rather than IDs; verify both tabs with API-backed data in-browser.
+- [x] Preserve venture and document context when navigating from the connected Ventures tabs into Sales and Knowledge; verify selected venture and exact document drawer in-browser.
+- [x] Bring connected Knowledge records into a demo-like list/detail layout, keep the authorized full-record drawer and evidence search, and verify record selection plus direct document links in the isolated API-backed browser fixture.
+- [x] Bring connected Decisions and Classes into demo-like list/detail layouts, add workspace-level creation entry points with destination selection, and verify a synthetic decision create/reload in a separate seeded smoke database. Browser inspection confirmed a venture-scoped destination after selection; signed-in production creation remains unverified.
+- [x] Bring connected Questions & requests into a searchable list/detail layout with named requester/respondent labels from the authorized member directory; verify selection and search/empty/restore in the isolated API-backed browser fixture. Answer submission remains unverified in a real signed-in session.
+- [x] Browser-smoke a connected Ready-to-In-progress drag, verify it persists after reload, then restore the tested task to its original Accepted status and verify that persists after reload.
+- [ ] Browser-smoke the remaining connected board drop targets and task-status transition rules.
+- [ ] Complete visual and interaction parity for connected Knowledge, Planning detail views, remaining People & access tabs, and remaining task/board details; test all real mutations without relying on demo-local state.
+- [ ] Verify signed-in production UI with a real account/session on port 3011, including create/edit/reload flows. The isolated development preview uses `x-dev-user-id` and does not prove the real auth flow.
+
+### 2.1 Collaboration
+
+- [x] Venture/group/channel navigation and channel chat
+- [x] `@mentions`, threads, reactions, pins, saved items, and search
+- [x] Direct messages and notification center
+- [x] Move connected DMs and channels to independent full-viewport, three-pane messenger routes
+- [x] Keep Channels and Messages in the shared workspace shell: slide the chrome away on sidebar entry, omit the shared top header throughout chat, and animate the sidebar plus chat-area resize on double Escape. Verify both connected chat routes, intermediate sidebar widths, header absence, and web lint/build in the local preview.
+- [x] Start chat navigation immediately and wait for the destination screen to render before sliding the sidebar away; verify Channels and Messages in the connected browser preview, the demo loading fallback, double-Escape resize, and web lint/build.
+- [x] Animate newly arriving channel and DM bubbles, align avatars with bubbles, use a keyboard/right-click/hold channel action menu and paper-plane send icon, and add active-chat sound cues. Verify the live browser layout/menu, web lint/build, worker push tests, Mongo notification authorization tests, and independent backend review. Closed-tab VAPID delivery remains tracked below.
+- [x] Let the chat-nav icon toggle the workspace sidebar, remove the channel-list search and idle file strip, add group message/file search in the channel header, tighten header actions, and provide inline group @mentions plus an attachment-type menu. Verify connected Channels and Messages navigation, modal/menu keyboard behavior, mid-message mention insertion, web lint/build, API typecheck, real-Mongo search isolation/overflow tests, and independent backend review.
+- [x] Slide the connected Channels group-details panel while it resizes chat, enter the group workspace sheet from fully below the viewport, fit its tabs to content, and float the composer within chat without covering command preview. Remove avatar-credit copy from Group Details while preserving app attribution. Verify the live browser layout, panel transition geometry, sheet/tab sizing, command preview and cancellation, console, web lint, and production build.
+- [x] Slow the group workspace sheet to a fast-start/ease-out entrance without moving chat or Group Details, distinguish its tab bar, and read active-venture knowledge in a fourth tab. Verify settled and opening geometry, venture switching, record detail, browser errors, web lint, and production build.
+- [x] Replace connected and demo Knowledge list/side-preview layouts with document-thumbnail grids and full-width readers; keep the group-sheet reader scoped to its active venture. Verify tile open/back, direct document links, packet mode, search/files tabs, demo parity, web lint, and production build.
+- [x] Unify connected and demo Knowledge browsing into a record/file library, add distinct Markdown and file upload dialogs with multi-file queues and per-file status/progress, and display supplied Markdown/PDF artwork plus type/fallback file icons. Verify connected and demo dialog/layout states in-browser, authorized file-list API tests, web lint/typecheck/build, and API typecheck/tests.
+- [x] Keep the custom venture menu inside the native Knowledge upload dialog's top layer and center the file picker; verify all three ventures display, venture selection, Escape behavior, browser layout, and web lint/typecheck/build.
+- [x] Animate the Ventures submenu, add a persistent sidebar venture/All scope across connected Dashboard, Today, Tasks, Board, Knowledge, Planning, Sales, and Channels, remove redundant page venture filters, merge Markdown into Upload file, open Knowledge files in a full-area reader, and use switches for settings booleans. Verify Buildory/All data changes, scoped upload destination, text reader, accessible switches, web lint/build, and diff check. PDF rendering and a real upload still need separate browser checks.
+- [x] Keep New pipeline visible for authorized managers in All ventures, require an explicit venture destination there, and show a read-only destination in a selected venture. Verify both browser entry states and destination choices, isolated API parent IDs and resulting scope, web lint/build, and API tests without adding a test pipeline to live user data.
+- [x] Add an admin-only "New venture" entry to the sidebar venture-scope menu that opens a shared Create venture drawer (also used by the Ventures page), navigates to the new venture, and hands the sidebar scope to it once the shell reloads. Verify keyboard and mouse entry, Escape with focus returning to the opener (also fixed for the Ventures page), creation from a selected-venture scope, the entry hidden for a venture head, web lint/typecheck, and production build in an isolated test workspace.
+- [x] Give connected Knowledge files and Markdown records the same edge-to-edge reader with a full-width header flush to the content top; retain record details/actions. Verify the Buildory Markdown tile, TXT tile, Back control, details drawer, web lint, and production build in the preview.
+- [x] Show authorized, size-bounded image thumbnails in connected Knowledge tiles, load them only near the viewport and release off-screen image URLs, and remove the extra blank row below short filenames. Verify the existing WEBP tile in-browser, API authorization and failure cases, lint, typecheck, build, tests, and independent backend review.
+- [x] Render connected Knowledge records and uploaded `.md`/`.markdown` files with shared Markdown/GFM formatting and a Rendered/Raw reader control. Verify a Buildory record in both modes in the browser, and pass web lint, typecheck, and production build; the uploaded-Markdown branch is compile-checked but still needs a live file fixture.
+- [x] Add permission-aware Edit icons to connected Knowledge records and a full-page Markdown/plain-text editor with Write/Split/Preview modes, formatting tools, change summary, versioned draft save, and an in-app unsaved-edits confirmation. Verify tile and reader navigation, heading formatting, both discard choices, targeted lint, and web build in the local preview; an actual save/reload still needs a disposable document fixture.
+- [x] Browser-test editor save/reload using a disposable Knowledge record; do not alter an existing user record for testing. Verified 2026-10-04 in the signed-in dev workspace: version 2 saved and shown after reload, a stale editor save was blocked with the newer-version message while keeping the typed text, the leave-page guard and Discard edits dialog worked, and the test record was archived.
+- [ ] Scope Word `.doc`/`.docx` editing separately with a formatting-preserving editor/conversion path; do not offer plain-text editing for Word files.
+- [ ] Browser-test an uploaded Markdown file in both Rendered and Raw modes, including a reload, using a disposable fixture rather than a private user file.
+- [ ] Browser-test an actual connected Knowledge file upload against the configured object store, including progress, reload, and preview; do not use private user files as test fixtures.
+- [x] Fix the development R2 bucket's browser-upload CORS for the active `localhost:3012` preview while preserving `localhost:3011`, `PUT/GET/HEAD`, `Content-Type`, and exposed `ETag`; verify the previously denied signed-upload preflight now returns 204 for both origins. Do not change the production bucket.
+- [ ] Add pagination to group message/file search; the current modal returns the first 50 combined matches.
+- [x] Add visible admin controls for venture, group, and channel creation in connected Channels
+- [x] Fix scoped Channels creation dialogs to inherit the clicked venture/group without a redundant selector; verify both dialogs in-browser and created scope in the isolated Mongo API test
+- [x] Show deterministic DiceBear Adventurer avatars for connected workspace users
+- [x] Smoke-check desktop and 390px chat layouts, admin create dialog, API-backed data, lint, and production build
+- [ ] Decide whether non-admin members or venture heads may create ventures, groups, or channels; update server permissions and reviewer tests only after policy approval
+- [x] Replace the flattened connected Channels list with a venture selector, expandable group rail, and selected-group-only channel list; verify desktop and 390px/320px navigation, deep links, and keyboard focus
+- [x] Dock Channels details beside chat and open a group-scoped Kanban/Attachments/Saved workspace sheet; verify paged feeds, authorized status moves, image preview and invalid-media fallback, desktop/320px layout, scope switching, and Escape/focus return in an isolated browser fixture
+- [x] Add admin-only group People controls in connected Channels: named roster, fixed-scope existing-member search/add and precise group removal, with invite-by-email manual-link fallback; verify submitted group IDs, resulting roster, Escape/focus, and desktop/390px/320px layout in an isolated fixture
+- [x] Polish invitation/link delivery copy, replace web interface icons with Hugeicons, and add restrained contextual motion; verify web lint/build, connected link-only invite and clipboard flow, group sheet, reduced-motion styles, and full-viewport mobile invitation dialog
+- [x] Unify light/dark surfaces around grayscale and emerald, add shell-preserving route motion and sliding active-tab indicators, and persist theme preference; verify lint/build plus production-browser tab, route, theme-reload, and console smoke checks on localhost:3011
+- [x] Shift the primary accent to a lighter, contrast-safe money green; reduce small-label/body weight while preserving heading emphasis; stage page sections, dashboard cards, and task rows on route navigation. Verify web lint/build, light/dark screenshots, keyboard navigation, and settled browser routes with no console errors.
+- [x] Remove redundant page-level eyebrow and crumb labels from shared headers and dashboard headings, keeping the actual page titles and useful descriptions. Verify web lint/build and production-browser Today, Timeline, Requests, and demo Dashboard; connected visual verification remains auth-gated.
+- [x] Move venture links into the Ventures sidebar submenu, fit venture tabs to their labels, and show the 30-day goal only on Overview; verify submenu switching resets Overview in the production browser.
+- [x] Replace single-choice native dropdown menus with the shared styled combobox, including keyboard navigation; verify mouse/keyboard filtering in the production browser, plus web lint/build. The participant multi-select remains a listbox, not a dropdown.
+- [x] Add drag-and-drop status moves to demo, connected, and group Kanban boards, with visible drop targets and a keyboard/touch Move menu; verify demo drag, reload persistence, and restoration in the production browser, plus web lint/build. Connected boards remain authentication-gated for browser smoke.
+- [ ] Verify real invitation email delivery and the email-sent response UI after configuring a verified Resend sender; the user approved Resend for invitations on 2026-09-23, but development currently returns a manual link
+- [x] Verify a browser-originated channel message in an isolated UI fixture; send and reload passed against the 2026-09-23 local MongoDB preview
+- [ ] Connect active-group member discovery, additive Add people/Remove access, and real invitation issuance/acceptance; verify parent scope, delivery mode, authorization, and browser flow
+- [ ] Attach uploaded files to channel and DM messages; verify send, receive, reload, previews, authorization, and group media discovery
+  - [x] Browser-select synthetic text files, send in channel and DM, reload both conversations, find the file in group Attachments, and verify exact download bytes plus unrelated-user denial in the isolated local-storage preview
+  - [ ] Verify image/video/audio previews and repeat the browser flow against private Cloudflare R2 storage
+
+### 2.2 Work management
+
+- [x] Task detail and assignment flows
+- [x] Kanban board with people, tag, venture, group, status, and deadline filters
+- [x] Focus-mode timer popup and session history
+- [x] Reminder/snooze/completion interaction states
+
+### 2.3 Admin and knowledge
+
+- [x] Group/venture creation and member/role management in the demo UI
+- [x] Slash-command composer and admin command feedback
+- [ ] Files, links, notes, and lightweight knowledge search
+- [x] Settings, notification preferences, and integration surfaces in the demo UI
+- [x] Sign-in/invite demo surfaces and founder admin audit/PAT surfaces
+- [x] Document UI-to-backend contract seams
+- [x] Verify a separate connected dashboard preview against session, dashboard, and paged task contracts
+- [x] Verify connected sign-in request, invitation acceptance path, task/board, channel/command preview, inbox, and focus UI slices against the local API and Mongo tests
+- [ ] Add first-admin email-verified signup with a one-time claim and close `/signup` afterward; independently review auth and verify API/browser flow
+- [x] Verify connected knowledge search and planning reads for outcomes, decisions, classes, and information requests against the local API
+- [x] Verify planning, sales, and admin connected controls in the browser, and channel action contracts in the Mongo-backed API smoke suite
+- [x] Connect authorized member discovery to task assignment, board filtering, channel mentions, DM recipients, and class reviewers; inspect the pickers in the browser
+- [x] Connect reminder IDs and preferences, focus history, document browse/edit, class applications/review, and DM history/send to the published contracts; verify the new reads in the browser and mutations in Mongo-backed API tests
+- [x] Verify same-origin Socket.IO polling in the browser by receiving another local member's channel message without reloading
+- [x] Connect signed file upload/completion, authorized file-name search/download preparation, and task-scoped attachments; verify a synthetic local browser upload and downloaded bytes by SHA-256
+- [x] Verify scoped venture-head document approval in the browser on a synthetic local record
+- [x] Add connected Knowledge draft creation/Markdown import and venture/workspace destinations, plus scoped Planning creation for outcomes, decisions, classes, and information requests; verify browser create/reload, resulting IDs and scopes, denied roles, validation error, and desktop/390px/320px layouts in the isolated local fixture
+- [x] Make the connected workspace the default at `/` and `/dashboard`, route the main navigation to API-backed pages, and isolate the sample-only prototype under `/demo`; verify desktop/mobile navigation and keyboard behavior
+- [ ] Verify physical browser save/download in a browser that exposes a download event or saved file
+- [x] Repair and verify admin document list/detail scope for venture and workspace records in the backend (real-Mongo scope tests)
+- [ ] Verify browser Socket.IO with a real Better Auth cookie and staging reverse-proxy/sticky-session configuration
+- [ ] Integrate shared contracts when the backend publishes them
+- [x] Second pre-hosting fix pass: channel notifications are mentions-only (admins are always in channel scope and mentionable); production builds redirect /demo and hide demo links unless NEXT_PUBLIC_ENABLE_DEMO=true; signed-out visitors are sent to sign-in with a return path while signed-in non-members get an explanation; document saves carry baseVersionId and return 409 instead of overwriting a newer version, with version numbers assigned inside the transaction; blank Markdown is a 400; TRUST_PROXY is configurable (true rejected in production); NODE_ENV=production requires APP_MODE=production; start scripts added and the root build compiles shared packages first. Verified core 4/4, API 6/6 and worker 4/4 on a real replica set, web lint and production build (demo redirects in the routes manifest), a signed-out browser redirect, and independent backend review.
+- [x] Real-service smoke on the dev stack: a synthetic PNG uploaded through the Knowledge dialog to the private R2 dev bucket (Uploading, Finalizing, Ready), its thumbnail was generated from R2, and the signed download matched the source SHA-256; the test object and record were then deleted. Development VAPID keys were added to the ignored local .env and push-config reports available; browser subscription and delivery remain for a manual check.
+- [x] Fix verified defects without changing intended flows: store create-route dates as BSON dates (plus idempotent migration `003-string-dates`) so context packets and date queries work; validate evidence URIs as http(s) and stop persisting absent evidence URIs and opportunity next-action dates as null (which broke task detail and the whole Sales screen); add opt-in newest-first channel paging so channels over 100 messages open on the latest page and Load older prepends with the reading position kept; start cursor-less event replay at the newest window; map malformed/oversized bodies to 400/413 and unhandled duplicate keys to 409; scope MCP venture status outcomes/decisions to the workspace; refresh the shell sidebar after Channels creates a venture, group, or channel without snapping back to the previous scope; keep demo stub redirects inside `/demo`; make the muted-DM worker test exercise the preference path. Verified contracts/core build, API/worker typecheck, core 4/4, API 6/6 and worker 3/3 against a real replica set, web lint and production build, an isolated seeded browser smoke (paging, live arrival, scope handoff in selected and All scope, demo redirects, evidence submit/reload/review, Sales list), and independent backend review.
+- [x] Multi-user QA pass (2026-10-04): six read-only tester agents used an isolated seeded stack (`*.localhost:3012`, separate database) as admins, venture heads, contributors, reviewers, and learners across chat, DMs and notifications, tasks/board/focus, knowledge, planning/sales, navigation/mobile, and admin/permissions. Server-side authorization and venture isolation held everywhere. Fixed the findings that change behavior or lose data: an opportunity stage change no longer wipes its contact (partial update schemas no longer inject defaults); whitespace-only titles, answers, and descriptions are 400s; outcome review dates must follow start dates (checked only when a date changes); requests follow open â†’ answered â†’ reviewed â†’ closed (only the respondent answers, only from open; only the requester or a venture lead reviews, closes, or reopens; nobody reviews their own answer; review never overwrites the answer and a new answer clears the old review); evidence comes from the assignee or a venture lead, and non-admins cannot review their own submission or evidence on their own task; an access save refuses to overwrite a concurrent group change; snoozing a repeating reminder never moves it earlier; Mark stale only applies to approved records, race-safe; documents cannot be created at a sensitivity the creator cannot read; venture and group names are unique case-insensitively; a no-op access save keeps inherited venture access; `POST /notifications/read` marks a conversation's (or all) alerts read; a Next proxy keep-alive race (intermittent 500s) is closed. In the UI: readable validation messages everywhere, notification deep links to the task/channel/DM, Mark all read, toasts on chat routes, thread/reply/reaction/saved indicators and long-text wrapping in chat, document-not-found and unsaved-editor-navigation guards, task not-found/deadline-risk/activity authors/evidence-form gating, board and planning overflow, phone top bar and inert closed drawer, branded 404, plain page titles, ventures not-available state, People & access highlighting and admin-only links, dashboard counts excluding draft/cancelled outcomes and past classes, timeline without cancelled items, request review/close/reopen controls, class applicant names, one sales column per stage, drawer-scoped errors, learner composers disabled, `@handle` DM search, and a per-tab dev identity for multi-user local testing (documented in README). Verified core 4/4, API 7/7 and worker 4/4 on a real replica set, typecheck, web lint and production build, browser checks on the isolated stack at desktop, 375px, and 320px, and two independent backend reviews (all Medium findings fixed).
+- [ ] Remaining low-risk review items: enforce case-insensitive venture/group uniqueness with a collated unique index after de-duplicating existing names (today it is a check before insert); mark legacy message notifications without chatKind read when their conversation is opened; pin document approval to the reviewed version; guard concurrent outcome date edits in the update filter.
+- [x] Interaction and motion pass (2026-10-04), following the motion review page (recommended defaults): shared motion primitives (exit transitions for drawers, dialogs, popovers, and the group sheet; collapses; skeletons; stacked toasts with Undo; rolling numbers; label swaps; row highlights), board and group-sheet drag-and-drop with card glide and optimistic moves that roll back on failure, optimistic chat sends and reactions with day separators, grouping, a new-messages pill, slash commands, paste/drop attachments, upload placeholder chips, and a per-browser message-sound mute; sliding active pill, collapsed-rail tooltips, remembered collapse with Ctrl+B, Ctrl+K arrow/Enter navigation, Back/Forward scroll restore, unread count in the tab title, and a top-bar focus countdown in the shell; live Unread signals and skeleton/Try again on Dashboard and Today; venture sections in the URL with counts and scope-follows-sidebar; member search and a confirm step that lists removed access in People & access; focus ring and presets; Unread tab, undoable Mark read, and Saved states in the inbox; removed two unused screens. Verified typecheck, web lint, production build, and browser checks on the isolated stack (desktop) for the sidebar, palette, collapse persistence, chat sheet and saved-message jump, board moves, ventures tabs/scope, admin confirm and discard guard, focus start/complete, and inbox Undo/commit. An independent review found no crash or data-loss issues; its behavior findings were fixed (member picker never picks from a stale search, Mark read is sent when its Undo toast closes and survives a racing inbox poll, moved board cards keep keyboard focus, preview stepping keeps focus, Back/Forward restore only for a different page, the sidebar pill cannot stick, editing a failed message restores its files and reply without overwriting a draft, admin promotion and double-clicks are confirmed safely, and editor drafts are per member).
+- [x] Apply the motion review choices (2026-10-05): tab content fades and slides 10 px from the side of the chosen tab (200 ms); board cards glide on a soft spring (bounce 0.25) and a dragged card lifts and tilts (scale 1.04, -2.5Â°) then springs into place; the bell swings with its badge pop (620 ms); progress bars grow in on load (650 ms, staggered) and slide on change; dashboard numbers roll digit by digit (450 ms); the sidebar pill uses a strong ease-out; rows leave by fading (120 ms) then folding (180 ms); the theme icon is unchanged as requested. Verified typecheck, web lint, production build, and browser checks of the odometer, tab direction, spring glide, and drag lift/tilt on the isolated stack.
+- [ ] Motion follow-ups: focus pause/+5 minutes needs an API change; Mark read Undo is client-side (the read is sent when the Undo window closes) until a mark-unread endpoint exists; recheck the pass at 375px and in Safari.
+
+### 2.4 Verification
+
+- [x] Route-level UI smoke tests
+- [x] Responsive pass at 390px and 320px for all studio routes
+- [x] Connected keyboard pass: named controls, tab order across core routes, and task drawer focus trap, Escape, and focus return
+- [ ] Keyboard-accessibility pass
+- [ ] User approval of the complete dummy UI
+
+## Phase 3 â€” Backend foundation
+
+- [x] Define shared Zod contracts and error/event envelopes
+- [x] Implement Better Auth identity/session flows and magic-link delivery adapter
+- [ ] Verify real magic-link and invitation email delivery with a configured sender and Resend account; user approved Resend invitation delivery on 2026-09-23
+- [x] Implement app-owned workspace, venture, group, channel, role, and membership authorization
+- [x] Add MongoDB models, indexes, migrations/backfills, and seed data
+- [x] Add API request validation, structured logging, audit records, and rate limits
+- [x] Fix the local 429 regression: avoid route-change shell refetches, separate authenticated read/write buckets (300/120 per actor per minute), keep anonymous and invitation ingress limits, and return Retry-After; verify real-Mongo API tests, web lint/build, independent review, and a connected browser route smoke on ports 3012/4010.
+- [ ] Harden production auth ingress against abusive unauthenticated traffic with a verified proxy/IP strategy; generic anonymous requests currently resolve session identity before their limit, and `/api/auth/*` depends on Better Auth production-mode limiting.
+- [x] Independent reviewer-agent approval for auth and permission boundaries
+- [x] Backend unit/integration smoke tests
+- [x] UX-parity API slice: additional channels, membership role/scope replacement, message reactions/pins/saves, and planning/sales edits
+- [x] Independent auth/realtime review of the UX-parity slice and real-Mongo backend smoke verification
+- [x] Reviewed backend contract slice: member directory, browser socket authentication, reminder IDs and reads, focus history, document browse, and class application review; real-Mongo smoke verification
+- [x] Backfill legacy handles without overwriting existing values; verify seeded @commands and mentions with real Mongo and independent authorization review
+- [x] Support safe positional command timing aliases while preserving named syntax, preview/execute idempotency, and real-Mongo verification
+
+## Phase 4 â€” Realtime work, commands, and automation
+
+- [x] Socket.IO channel messaging, presence, mentions, and notification fan-out
+- [x] Task lifecycle, comments, attachments, Kanban views, and saved filters
+- [x] `/assign` and `/notify` parsing with permissions, previews, and auditability
+- [x] Durable reminder worker with outbox, retries, idempotency, and escalation rules
+- [x] Focus sessions and timer recovery across refresh/reconnect
+- [ ] Complete Web Push browser subscription and credentialed delivery checks; worker adapters and server-side preferences exist, but closed-tab push is not yet verified
+- [x] Show a connected in-app unread bell and new-notification banner with visible-tab polling, no first-load or duplicate toast, inbox refresh, and reminder snooze/open actions; verify desktop/390px/320px behavior in an isolated browser fixture
+- [ ] Add browser permission/subscription UX for push outside an open tab; in-app polling does not deliver closed-tab alerts
+  - [x] Add user-initiated browser controls and safe notification-click routing to the authenticated inbox; verify the unavailable state, worker routing tests, and web lint/build. Push text is generic to protect shared-browser account switches. Live VAPID subscribe/unsubscribe remains unverified.
+- [x] Independent reviewer-agent approval for realtime and scheduling paths
+- [x] End-to-end smoke tests for assignment, reminders, snooze, and completion
+
+## Phase 5 â€” Files, knowledge, and MCP
+
+- [ ] R2 upload flow with signed URLs, metadata, authorization, and lifecycle rules
+- [ ] Configure separate private R2 development/production buckets with scoped keys; verify real browser upload/download and no local fallback when R2 is selected. On 2026-09-23, private `venture-studio-dev` and `venture-studio-prod` buckets existed/created, and dev CORS was limited to `http://localhost:3011`; scoped credentials and live R2 smoke remain pending.
+- [x] Add authorized, paginated group file and saved-message feeds with cross-group/cross-workspace Mongo smoke checks
+- [ ] Validate uploaded media contents and playback for image/video/audio previews; the current allowlist checks declared MIME type and size only
+- [x] Search/indexing across authorized messages, tasks, and documents
+- [x] Repair missing/legacy-null workspace document scope and admin all-venture visibility across REST and MCP; verify role/sensitivity boundaries in real Mongo and independent review
+- [x] Omit absent document version source URLs on write and normalize legacy null URLs on read; verify POST/GET/PUT contracts with real Mongo
+- [x] Read-only MCP server with scoped local PATs, revocation, and audit logs
+- [x] Threat-model and reviewer-agent pass for file and MCP data boundaries
+- [x] Hosted MCP for Claude Code, phase 1 (2026-10-08, local only, not deployed). Plan and reference are in `docs/mcp.md`; the decision log in `docs/architecture.md` is amended.
+  - **Endpoint:** stateless Streamable HTTP at `/mcp`, proxied by the web app.
+  - **Tokens:** personal access tokens that are hashed, scoped, expire within 366 days, are bound to the owner's membership, revoke immediately, and are revoked when the membership is renewed.
+  - **Tools:** 17 tools and 3 prompts that reach data only through the product API as the token's owner, on an allowlist of routes.
+  - **Scopes:** enforced per tool and inside tool output. A write scope needs its read scope. Direct messages are never exposed.
+  - **Retries:** atomic retry de-duplication by `requestId`, refused when the arguments differ.
+  - **Limits:** per token, per person, and per IP before sign-in; a separate API bucket so Claude never throttles the browser; no batches; 64 KB bodies; Origin check.
+  - **Output:** hidden characters stripped from people-written text, an untrusted-text note, and UTC labels.
+  - **Switches:** `MCP_ENABLED` and `MCP_WRITES_ENABLED`. Production keeps MCP off until `deploy\.env` sets `MCP_ENABLED=true`.
+  - **Connect Claude page:** create a token (read and update, or read only), copy the `claude mcp add` command and an hourly `/loop` prompt, and revoke tokens.
+  - **Reminders:** personal reminders via `POST /v1/reminders`, delivered by the worker.
+  - **Removed:** the old stdio server, which leaked other ventures' outcomes and decisions.
+  - **Verified:**
+    - Backend smoke suite (core 4/4, API 12/12, worker 4/4, typechecks) and web typecheck and lint.
+    - Two Sonnet QA agents against a throwaway seeded stack, one functional (every tool and prompt, the SDK client, sizes and latency) and one adversarial (auth, scopes, cross-venture and archived data, foreign writes, injection, batches, idempotency races, rate limits). Their findings were fixed and re-verified.
+    - Two rounds of independent backend review, with all Medium and Low findings fixed.
+    - A 12-check live smoke through the official MCP client.
+    - A final pass on the final code with the worker running: worker-created notifications in `whats_new`, reminders firing on time, direct-message text hidden from every tool, the review flow, the per-person cap, and the route allowlist with all 17 tools.
+    - The Connect Claude page in a browser: create, copy, the `/mcp` proxy through the web app, and revoke.
+  - **Not verified:** a real Claude Code session, because the CLI's weekly limit was reached.
+  - **Follow-ups:** phase 2 OAuth plus an in-chat view for claude.ai and Desktop; phase 3 `post_message` and `create_task`.
+- [ ] Turn hosted MCP on in production: set `MCP_ENABLED=true` in `deploy\.env`, rebuild, create a token on os.buildory.dev, and connect one real Claude Code session end to end (owner approval required).
+- [x] Integration smoke tests
+
+## Phase 6 â€” Production hardening
+
+- [x] Local production stack for one Windows PC (2026-10-06): `deploy/` Docker Compose with Node 22 images for web (Next standalone), API and worker; MongoDB 8 as an authenticated single-node replica set (not published); a backup service (full `mongodump --oplog` at start and every 24 h, 14 days local, optional R2 copy with 30-day pruning, hourly upload retry, unhealthy when stale, failed, or mid-restore); a pinned Cloudflare Tunnel; and `deploy\prod.cmd` (init with generated secrets and push keys, check, up, status, logs, backup, verify-backup, restore with a gzip check, safety copy, backup pause, and restart only on success). The API keys per-IP limits on `CLIENT_IP_HEADER` (also passed to better-auth), groups IPv6 by /64, and treats blank env values as unset (blank `APP_MODE`/`NODE_ENV` still fail); the signup pages forward the visitor address. Verified API 8/8, worker 4/4, core 4/4 on a real replica set, typecheck and lint, image builds, and a throwaway full stack: health, rewrites, polling handshake, demo hidden, client-IP and IPv6 rate-limit keys, verify-restore, refused damaged file, restore with safety copy, and an upload-failure marker. An independent review's findings were fixed.
+- [x] Sign-in and sign-out flow (2026-10-07): `/sign-in/live` checks the session on the server and sends signed-in visitors on to a sanitized `next` (same-site only, re-checked after dot-segment normalization, never back to sign-in/signup or API routes; 35 bypass cases pass), with 3 s API timeouts. It links to `/signup` only while first-admin setup is open, and the "Open workspace" button is gone. Sign-out now exists: in the sidebar user card (also when collapsed), on the signed-in-without-access screen, and as "Use a different account" on the invite page; a failed sign-out shows an error instead of bouncing. Verified on a throwaway stack with real magic-link sessions (signed-out form and setup link, signed-in redirect, `//` and `/.//` bypasses refused, no-access screen, admin claim, sign-out from the expanded and collapsed sidebar, invite page in both states), typecheck and lint, an independent review (its open-redirect, sign-out failure, and timeout findings fixed), and on os.buildory.dev after the rebuild.
+- [x] Editable venture 30-day goal (2026-10-07): `PATCH /v1/ventures/:id` takes only `goal30Day` (strict, trimmed, max 500, empty clears) from an admin or a venture head assigned to that venture, scoped to the actor's workspace, with the update and a `venture.goal.update` audit event (venture ID, cleared flag) in one transaction. Venture Overview shows "No 30-day goal yet" and a Set goal/Edit button for those people only, with an inline editor (Escape cancels, Ctrl/Cmd+Enter saves, focus returns to the button), and refreshes the shell after a save; demo mode edits local demo data. Verified with a new API test (admin, own head, other head, contributor, cross-workspace both ways, unknown venture, unauthenticated, length, extra fields, non-string, whitespace clear, audit events), the backend smoke suite (core 4/4, API 9/9, worker 4/4, typechecks), web typecheck and lint, a browser run on a throwaway stack (set, save, reload, Escape cancel, clear, keyboard-only flow), and an independent review whose audit, venture-matching, accessibility, and wording findings were fixed. Concurrent edits are last-writer-wins and other open sessions see the change on their next load.
+- [x] Workspace-level invitations (2026-10-07): People & access has an admin-only Invite member drawer (email, role with a plain-language description, ventures, and groups within chosen ventures; admins get a trust warning and no venture list). It needs at least one venture for non-admin roles, notes that a person without a group cannot open tasks, board, or channels, shows a copyable one-time link when email delivery is off, and explains an existing-member conflict. It uses the existing admin-checked `POST /v1/admin/invitations`; the group panel's invite now shares the same client call, which checks that the response matches the requested access exactly. Verified with web typecheck and lint and a throwaway stack: no-venture check, contributor invite to one venture and group, acceptance by the invitee giving exactly that access (other venture hidden), the new member listed, existing-member conflict message, and an admin invite.
+- [x] Auth screens restyled after VoiceOPS (2026-10-07): sign-in, first-admin setup, setup completion, and the invitation page share an `AuthShell` (animated WebGL silk background with a static fallback image, a white-framed showcase panel with a serif headline on wide screens, and a white form panel), VoiceOPS-style fields and dark buttons, a fade on content swaps, and a shake on errors. The invitation page now shows which account is signed in, offers "Sign in to accept" when signed out, and "Use a different account" when signed in. Verified with web typecheck and lint and a throwaway stack: each screen on desktop, the invite page signed out, signed in, and with an invalid invitation error, and the 375 px phone layout without horizontal scroll.
+- [x] Layout polish (2026-10-08): tab bars size to their tabs everywhere; the Kanban boards (demo and live) drop the labelled filter panel for a row of content-width pill filters above the columns, highlighted while active, with Clear and a filter-icon toggle (card count and active-filter badge) that collapses the row and is remembered per browser; People & access (demo and live) lists members as a table (member and handle, gradient role pill per role family, two venture chips then +N, group count, Edit) that stacks into cards on phones. Verified with web typecheck and lint, the demo pages in a browser at phone, 800 px, and 1440 px widths in light and dark themes, and the live board and People pages signed in to the dev workspace.
+- [x] Focus sessions pause and resume (2026-10-08): `POST /v1/focus/:id/pause` and `/resume` are single atomic updates on the caller's own running session (`pausedAt` freezes the clock; resuming moves `endsAt` by the pause and adds it to `pausedMs`; completing while paused counts the open pause). The live focus page has Pause/Resume, logged minutes exclude paused time, and the top-bar timer shows "Paused" with an amber dot. The demo dock labels a paused sprint Resume and picks one of your own tasks. The misleading hand-gesture icon became a circular reset arrow (and a reply arrow in chat). Verified with a new API test (owner-only, double pause and resume refused, `endsAt` shift equals `pausedMs`, finishing while paused, finished sessions refused), the API suite 10/10, web typecheck and lint, and start, pause, refresh, resume, and complete on the live focus page in the dev workspace.
+- [x] Venture archive, restore, and permanent delete (2026-10-08): admins, and venture heads for ventures they lead, archive or restore a venture from the Ventures page's more menu (with Undo) and an Archived ventures panel; admins can permanently delete an archived venture after typing its exact name. An archived venture is hidden from everyone, admins included, and frozen: the request membership drops it (`withArchiveScope`), `can()` refuses it, and admin-wide reads exclude it across navigation, dashboard, tasks, outcomes, reminders, knowledge, files, search, sales, chat, events, notifications, and MCP; the worker holds its reminders and notices and restore re-arms them. Delete runs in one transaction (refused without transactions), cascades every venture-linked collection, strips it from memberships and pending invitations, and keeps every removed or rewritten document in `deleted_records` for 30 days (TTL); file objects stay in storage for recovery. Verified with a new API test (permissions, hiding and freezing for admins and members, archived list, restore and re-arm, delete guards, cascade scope, membership and invitation cleanup, recovery copies, audit), the backend smoke suite (core 4/4, API 11/11, worker 4/4), web typecheck and lint, an independent review whose findings were fixed, and archive, restore, and delete of a throwaway venture in the dev workspace. Follow-ups: a storage cleanup for deleted ventures' files, and batching very large deletes.
+- [x] Empty states and layout pass (2026-10-08), from an owner-reviewed audit of all 18 live screens (the review page decided each item).
+  - **Empty-state kit:** a shared `EmptyState` (`components/ui/empty-state.tsx`) with page, card, filtered, select, error, column, and compact variants. It has tone-coloured gradient icon tiles and an ordered (Bayer) dither drawn by `components/ui/dither.tsx` from theme tokens. `Empty` now renders the card variant.
+  - **Screens converted:** Tasks, Board, Decisions, Requests, Classes, Planning, Timeline, Sales, Notifications, Channels, Messages, Knowledge, Ventures, Admin, Focus, Dashboard, Today, and the group workspace sheet. Blank cards (venture overview, dashboard) are filled.
+  - **Correctness:** "nothing yet" and "filtered out" are now separate, with Clear filters. A failed load shows an error with Try again instead of "No â€¦ yet". Skeletons replace the empty flashes on classes, reminders, the people list and the board. Copy follows the venture scope and the person's access.
+  - **Layout:**
+    - Page headers use one order: icon-only Refresh, then secondary actions, then primary; secondary labels hide on phones.
+    - Tab rows fade at the edge that scrolls. Cards size to their content. Detail panes are centred and hidden on phones until something is selected.
+    - The board has a Grid/Row switch, remembered per browser. The People rows on phones keep Edit beside the name.
+    - The duplicate header New task buttons are gone; the top-bar New task now shows on phones as an icon and opens the form even when Tasks is open.
+    - The phone shadow bleed is fixed, and the sidebar shows a fade when more links sit below.
+  - **Dashboard and Today:** shared stat cards that link to their lists. A tone-coloured dither always sits in the corner and spreads on hover or focus (an eased reach tween in `Dither`).
+  - **New task from anywhere:** the top-bar New task (an icon on phones), every Draft or Create task shortcut, the board, and the Tasks page's `c` key open one shared popup (`components/studio/new-task-dialog.tsx`) over the current screen. There is no redirect, the current venture is preselected, and a half-filled form asks before closing. Its header has a slowly drifting dither (`Dither animated`: about 24 fps, paused off-screen or in a hidden tab, still under reduced motion). Creating a task shows a toast with Open task, and the Tasks page, board and dashboard refresh. Old `?new=1` links still work. Verified with 16 browser checks at desktop and phone width.
+  - **Focus:** start uses a two-ring dial (minutes outer, hours inner, max 4 h). It snaps to detents, carries across 12 o'clock, vibrates where supported, and works from the keyboard.
+  - **Connect Claude:** the token is readable in dark mode with a copy fallback, and the page is one flow (empty state, create dialog, key cards, setup guide drawer).
+  - **Verified:** web typecheck and lint; screenshots of every screen in light and dark at desktop and phone with no overflow or console errors; an independent code review whose findings were fixed; the owner reviewed the screens.
+- [x] Designed invitation and sign-in emails (2026-10-08), the owner-chosen "dither hero" direction.
+  - **Templates:** email-safe HTML (tables and inline styles) plus a plain-text part, in `apps/api/src/email/templates.ts`. Cabinet Grotesk headings where clients load web fonts, otherwise Plus Jakarta Sans or Helvetica.
+  - **Artwork:** a dithered banner, a fully rounded and centred dither button, and the Venture Studio OS logo in the header and the brand footer. All embedded inline (`cid:`, about 14 KB) so emails render even when the site is down; regenerate with `apps/api/scripts/email-art.mjs`.
+  - **Invitation content:** the inviter, role, ventures, groups, a fallback link, the real expiry date, and "wrong address?" guidance. Subject: "<first name> invited you to <workspace>". The sign-in link email matches it, with an explicit 5-minute expiry.
+  - **Accepted invitations:** the inviter gets a `member_joined` notification (in-app, plus push or email per their preferences). It is created in the accept transaction and delivered only while they are still an admin.
+  - **Verified:** the API test asserts the subject, HTML, plain text, inline images, and the single notification. Backend smoke (core 4/4, API 12/12, worker 4/4); typechecks; web lint; an independent review whose findings were fixed; previews at desktop and phone width.
+- [x] Group access per venture (2026-10-08). Inviting or editing a member offers three choices for each venture.
+  - **The choices:** **All groups** (the default, and includes groups created later), **Pick groups** (only the ticked ones), or **No groups** (venture pages only). Each comes with a plain sentence saying what it means.
+  - **How it works:** memberships and invitations store `allGroupVentureIds`, and access is written into `groupIds`. Every existing permission check is unchanged.
+  - **New groups:** a new group is added to "all groups" members in the same transaction. A `groupsRevision` bump on the venture stops it racing a membership save or invitation accept.
+  - **Existing members:** they keep exactly the groups they had.
+  - **Removing someone from one group:** this switches that venture to picked groups for them. The Undo in the toast restores "all groups" as well.
+  - **Email and member list:** the invitation email says "All groups in <venture>". The member list shows "All".
+  - **Verified:**
+    - The API test covers the default, picked and none choices, accept, edit, remove and Undo, the audit entry, a create-versus-save race, the email line, and venture deletion.
+    - Backend smoke: core 4/4, API 13/13, worker 4/4.
+    - Typechecks and web lint pass.
+    - An independent review found no blockers, and its should-fix points were fixed.
+    - Tried end to end on an isolated local copy, at desktop and phone width, in light and dark.
+    - Two flaky MCP test checks (time of day, minute rollover) were hardened.
+- [x] Admins can be assignees and reviewers (2026-10-08). The person picker already listed workspace admins, but the server refused them: admin memberships list no ventures or groups, because admins reach everything through their role.
+  - **Where admins are now accepted:** one shared rule in `apps/api/src/assignable.ts` ("listed in the venture and group, or an active admin of this workspace") covers task create and reassign, chat `/assign` and `/notify`, and class reviewers, facilitators and participants.
+  - **Error message:** it now names who failed ("Reviewer is not an active member…").
+  - **Verified:** a new API test (admin as assignee and reviewer, reassign, `/assign` and `/notify`, an admin running a class; outsiders, inactive admins and other workspaces' admins refused); backend smoke (core 4/4, API 14/14, worker 4/4); typecheck; an independent review with no blockers.
+  - **Open policy points from the review:** demoting an admin to a scoped role can leave tasks they hold outside their new scope, and an admin can review their own task.
+- [x] Sidebar scrolls on shorter laptop screens (2026-10-08). On wide screens the sidebar was not held to the window height, so the menu never scrolled and the bottom (People & access, Connect Claude, account and sign out) was cut off on any window under about 1025px tall. It now fits the window and the menu scrolls. Verified in the browser at 1280×600 (expanded and collapsed), 1440×1000 and phone width, with a real wheel scroll, no console errors, and web lint and typecheck passing.
+- [x] Claude connection (MCP) batch 1, built and tested locally, not yet on the hosted MCP (2026-10-08). 26 new tools: knowledge, files, tasks, reviews, messages, decisions, requests, sales, and classes.
+  - **Knowledge:** list_documents, create_document, update_document (must name the base version), import_file_as_document, and drafts in search.
+    - Claude only ever writes drafts; approving stays in the app. The approve route is not reachable from Claude.
+    - Versions written through Claude are marked "(via Claude)".
+  - **Files:** list_files and read_file (PDF, Word .docx, Markdown, text), plus start_upload/finish_upload (a one-time upload link; Claude Code sends the file with curl).
+    - Group-only files can't become venture-wide documents.
+    - There is a 250 MB a day upload allowance through Claude.
+    - Word files can now be uploaded in the app too.
+  - **File reading on the server (`apps/api/src/file-text.ts`):**
+    - Runs in a separate short-lived process, with a memory cap, no secrets, and a 30 s kill.
+    - Word zip bombs are refused before parsing; text cleanup runs in linear time.
+    - Text is kept in `file_texts`, and the app's search now finds words inside uploaded files.
+    - Files uploaded earlier are read once after startup.
+  - **Team:** find_person, create_task, update_task, review_evidence, post_message, record_decision (always a draft), list_requests, ask_for_information, answer_request, list_deals, add_deal, update_deal, list_classes, list_class_applications, apply_to_class, review_class_application.
+    - Messages and task comments posted through Claude show "via Claude".
+    - Messages are limited to 10 a minute per key.
+    - Through Claude, nobody (admins included) reviews their own evidence.
+  - **Direct messages:** read_direct_messages and send_direct_message need a separate opt-in on the key ("Include my direct messages", off by default).
+  - **Keys:** new key permissions. The Connect page now defaults new keys to Read only.
+  - **App fixes found on the way:** an information request's respondent and a deal's owner must belong to the venture, and asking in a venture you can't open is refused.
+  - **Verified:**
+    - Tests: an end-to-end MCP test of every new tool and guard, hostile-file tests (zip bombs, million-space files, storage outages), and backend smoke (core 4/4, API 16/16, worker 4/4).
+    - Checks: typechecks, and web lint.
+    - Two independent reviews (security, and file reading); their blockers and should-fixes were fixed.
+    - A real MCP client session against an isolated local copy (curl upload of a PDF, read, import, task, message, decision, request).
+    - Screens checked: the "via Claude" label in the channel and the Connect page.
+- [x] Calendar, built and tested locally, not yet live (2026-10-09). Everyone gets a personal calendar, and each venture gets a shared one, with reminders.
+  - **Events:**
+    - Three kinds: private (only the organiser and invitees see it), whole venture, or one group.
+    - Anyone who can post in a venture or group can add events there. Only the organiser, an admin, or that venture's head can edit or cancel.
+    - An event created from a venture's calendar goes on that venture's calendar; the dialog shows it rather than asking.
+  - **Invitations:**
+    - Invitees answer Going, Maybe, or No.
+    - Anyone who can open a shared event can join it.
+    - The organiser is told about each answer.
+  - **Repeats:**
+    - Daily, weekly (on chosen weekdays), or monthly, until a date or for a number of times.
+    - One date can be moved or cancelled on its own.
+  - **Reminders:**
+    - Each person picks their own: from "at start" to 1 day before. All-day events offer 9:00 the day before or 9:00 on the day.
+    - They are planned 3 days ahead by the API and the worker, and they can be snoozed.
+    - They are never sent twice after an edit.
+    - People who lose access to the event get nothing.
+  - **Screens:**
+    - Month, Week (drag to create, move, or resize), Day, and Agenda views.
+    - Work shown as switchable layers: task deadlines, reviews, classes, information requests, deal follow-ups, and outcome reviews on a venture's calendar.
+    - A "Coming up" card on Today.
+    - Works at phone width and in dark mode. Notifications open the event.
+  - **Phone calendar link:**
+    - A private, read-only link for Google, Apple, or Outlook calendars.
+    - It is shown once and can be reset or turned off.
+    - The link's secret is never logged.
+  - **Claude (MCP):**
+    - New tools: list_events, create_event, and respond_to_event.
+    - New key permissions: calendar:read and calendar:write.
+    - Editing and cancelling stay in the app.
+  - **Verified:**
+    - Tests: backend smoke (core 7/7, API 17/17, worker 5/5).
+    - Checks: typechecks, web lint, and the production web build.
+    - Reviews: two independent reviews; all their should-fixes were fixed.
+    - Browser test on an isolated local copy:
+      - creating events, and inviting and answering as two people;
+      - a lead editing someone else's event;
+      - reminders delivered by the worker, and snooze;
+      - the phone link, and the Today card;
+      - phone width and dark mode.
+  - **Known limits:**
+    - There is no free/busy view (by design).
+    - Private events can invite any workspace member, with no daily cap.
+    - A phone link survives a member's removal and works again if they are reactivated.
+    - After an all-day event's time zone changes, a reminder that was already sent or in flight at that moment isn't re-planned for the new zone.
+- [x] Message alerts like WhatsApp Web, per-channel notification choices, and an installable app; built and tested locally, not yet live (2026-10-09).
+  - **The problem:** nobody had push turned on (0 browsers subscribed), because the only switch was buried in Notifications. The site also had no sound or banner while open, and it only checked the inbox every 15 s.
+  - **While the site is open:**
+    - In another tab or minimised: a two-note chime and a Windows/macOS banner ("Divyansh in #general: …"). Clicking it opens the chat inside the app, so drafts are kept.
+    - Open on another page: the in-page pop-up plus the chime.
+    - Viewing that chat: nothing extra.
+    - Only one tab alerts per message.
+    - The API nudges open tabs the moment a notice is created (a change stream on `notifications`), so alerts arrive in about 0.7 s.
+  - **When it's closed:** push now shows who wrote what and opens the conversation. The text is read with the browser's own sign-in, so a shared browser signed in as someone else gets a generic notice.
+  - **Channels:** a bell in each channel header offers All messages / @mentions only (the default) / Off.
+    - Off silences @mentions too.
+    - Followers are notified only while they can still open the channel.
+    - "All messages" notices go to the inbox and push, not email.
+  - **Settings:**
+    - Notifications → This device: banner, sound, push when closed, and Send a test.
+    - A one-time "Get notified about new messages" card (Turn on / Not now).
+    - Clearer labels in the account-wide preferences.
+  - **Installable app:** a manifest, home-screen icons and iPhone web-app settings. iPhone push needs Add to Home Screen, and the settings explain how.
+  - **Verified:**
+    - Tests: backend smoke (core 7/7, API 17/17, worker 5/5) with new tests for levels, fan-out, the nudge, read-one, the Claude text guard, and level changes after queueing.
+    - Checks: typechecks, web lint, and the production build.
+    - Browser test with two people on an isolated copy: channel and direct message banners, the in-page pop-up, one alert across two tabs, banner click opening the chat, and the prompt card.
+    - Review: an independent review found 1 blocker (Claude keys without message access could read channel text through `whats_new`) and 10 should-fixes; all were fixed.
+  - **Known limits:**
+    - A very busy "All messages" channel can push older unread items out of the newest-100 inbox.
+    - Tabs left open from before the update must reload once.
+    - Push behaviour on Safari and iPhone is untested.
+- [x] Message notch, like a MacBook notch or the iPhone Dynamic Island; built and tested locally, not yet live (2026-10-09). Skiper UI's version is a paid Pro component, so it was built in-house with no new library.
+  - **When it shows:** a new message (direct, a channel followed for every message, or an @mention) arrives while you're on another page of the app. It replaces the regular pop-up for messages; reminders and other notices keep that pop-up.
+  - **What it does:**
+    - A black pill drops in at the top centre and springs open into a card: initials, name, where it came from, time, and the message.
+    - Up to three messages stack inside it, newest first, with "and N more" below.
+    - It stays until closed (× or Escape) or clicked. Clicking opens the chat, marks it read, and drops that chat's messages from the notch.
+    - Closing reverses into the pill and fades. With reduce-motion on, it simply fades.
+  - **Verified:**
+    - In the browser: phone and laptop widths, dark mode, stacking, click-through, closing, and no notch while viewing that chat.
+    - Checks: typecheck, web lint, and the production build.
+- [x] Chat polish (2026-10-09), not yet live.
+  - **Avatar:** it now sits beside the last message of a run, in direct messages and channels, as in iMessage; the name and time stay on the first message.
+  - **Sideways scrollbar removed:** the hover reaction bar on your own short messages reached past the chat's right edge. It now opens towards the middle, and message lists never scroll sideways.
+  - **Verified:** in the browser with the details panel open.
+- [x] Knowledge for every venture, with a sharing permission and approvals (2026-10-09), built and tested locally, not yet live.
+  - **Permission:** in People & access, an admin can tick "Can share knowledge with all ventures" for a venture head or contributor. Admins always have it; any other role clears it.
+  - **With the permission:** you publish workspace-wide documents directly and approve other people's requests and suggested changes.
+  - **Without it:**
+    - Choosing "Workspace (needs approval)" and "Send for approval" sends a request. It stays hidden from everyone but you and the approvers until it's approved; then every venture sees it and it joins search.
+    - Approval publishes only the version the approver read. Approvers can decline with a note. Editing a declined request sends it again, and you can withdraw a request.
+    - Editing a workspace-wide document becomes a suggested change, one per person per document (suggesting again replaces it). The live version stays as it is until an approver accepts the change. A suggestion written on an older version can't be accepted, since it would undo the newer change.
+  - **Notices:**
+    - Approvers are told of each request and suggestion, but only if they can read the document; the author or proposer is told the result.
+    - No preference switch mutes these notices, and they drop out once the document is no longer readable.
+    - A "Waiting for your approval" list sits at the top of Knowledge.
+  - **Scope:** files (PDF, Word) stay per venture for now; Markdown documents and uploads can be workspace-wide.
+  - **Verified:**
+    - API and worker tests cover requests, declines, resends, version-pinned approval, suggestions (replacement, stale ones refused), sensitivity-aware notices, the permission and role changes, and withdrawals. The backend smoke passes.
+    - Independent review: its four medium and seven low findings are fixed.
+    - In the browser: both people's views of a request and a suggestion, granting and removing the permission, the button and destination labels, and notices arriving through the worker.
+    - Checks: web typecheck, lint, and the production build.
+- [x] Mentions read as names (2026-10-09), built and tested locally, not yet live.
+  - **In chat:** mentions show as "@Adarsh Singh" instead of "@adarsh-singh-52aa2ced", in channels and direct messages, in reply quotes and pinned messages, and when copying text. Hovering shows the handle.
+  - **Writing:** picking someone from the @ list writes their name; it is still sent as their handle, so mentions and notices work as before. When two people share a name, the second is written by handle.
+  - **Notices:** notifications, push alerts, and the new-message notch show names too.
+  - **Verified:** in the browser (channel and direct message, both people notified, stored text still uses handles); the backend smoke passes; web typecheck, lint, and the production build pass.
+- [x] Photos like WhatsApp: smaller by default, HD on request, shown inside the chat (2026-10-09), built and tested locally, not yet live.
+  - **Standard quality:** the browser shrinks a photo to fit 1080p (either way round: at most 1920 px long and 1080 px short) and saves it as WebP (JPEG where the browser can't write WebP). This also drops location and other metadata.
+    - Example: a 4 MB phone photo becomes about 150–350 KB.
+    - Left as they are: animations (GIF, animated PNG or WebP), small images, and anything that wouldn't come out meaningfully smaller.
+  - **HD:** an "HD" switch in the chat tray (and an "Upload in HD" box for task attachments) sends the original untouched. Switching after picking re-uploads the photos. It turns itself off after every message or upload.
+  - **In chat:**
+    - Images show inside the message at their own shape. Several form a grid with "+N", and HD originals carry a badge.
+    - Clicking opens a full-screen viewer with arrows or ← →, download, and Escape or a click outside to close.
+    - Thumbnails load as they come into view, a few at a time, retrying while the server is busy. Messages still sending show their photos too.
+  - **Verified:**
+    - In the browser: compression sizes, the HD switch both ways, grid, viewer, keyboard and focus, phone width, task uploads, and no message menu from the viewer.
+    - An API test covers image sizes on uploads and messages; the backend smoke, web typecheck, lint, and production build pass.
+    - An independent review's findings are fixed.
+- [x] Task details editable by their creator and admins (2026-10-09), built and tested locally, not yet live.
+  - **What:** the title, outcome, definition of done, evidence requirement, and tags, through "Edit details" on the task or Claude's update_task. Not once a task is done or cancelled.
+  - **Effects:**
+    - The activity log names what changed (and keeps the old values).
+    - The assignee is told when someone else edits.
+    - Start reminders take the new title.
+    - A reassignment in the same change uses the new title.
+  - **Verified:** API tests (creator, admin, lead and assignee refused, mixed changes, finished tasks, Claude's tool); in the browser, editing as an admin with the assignee's notice.
+- [x] Knowledge tabs: Venture context, Skills, Tasks, and Group chats, with Claude reading the venture context first (2026-10-09), built and tested locally, not yet live.
+  - **Venture context:**
+    - Several Markdown files per venture, written in the app or uploaded in bulk. Admins and the venture's head edit them; everyone in the venture reads them.
+    - Limits: up to 100 files and 500,000 characters per venture.
+  - **Skills:**
+    - Instructions for kinds of work, either workspace-wide (every venture) or one venture's own.
+    - Workspace skills need the share-with-all-ventures permission; a venture's need its head or an admin.
+    - Moving a skill between scopes needs both. Claude skill files (`name`/`description` front matter) upload as they are.
+  - **Tasks:** every task attachment I can open, newest first, filtered by type, linked to its task.
+  - **Group chats:** pick a group (and optionally a channel) to see everything shared there, newest first, filtered by type, with the photo viewer.
+  - **Claude:**
+    - The connector tells Claude to ask which venture you're working on, then read all of that venture's context (read_venture_context, in parts of about 10,000 tokens) before acting.
+    - Until it has read one to the end, its other tools carry a reminder.
+    - list_skills and get_skill let it follow a matching skill. The context and skills are guidance and never override what the user asks.
+  - **Verified:**
+    - API tests cover permissions, scope moves, limits, filters, cursors, Claude's tools and the reminder, and the splitting into parts. The backend smoke passes.
+    - In the browser: uploading, editing, moving a skill, and the Tasks and Group chats tabs with filters. Web typecheck, lint, and the production build pass.
+    - An independent review's findings are fixed. A permanently deleted venture takes its context and skills with it, with a recovery copy.
+- [x] Tasks written by Claude come out right (2026-10-10), built and tested locally, not yet live.
+  - **Why:**
+    - A task Claude made had its whole spec in the definition of done, ending in garbled tool-call text (`</definitionOfDone> <parameter name="tags">…`).
+    - Claude's call had been cut wrong, and the tool gave no guidance on what each field is for.
+  - **Details field:** tasks have Details (Markdown, up to 20,000 characters) for background, specs, links, and plans.
+    - It is shown in the task drawer (images as links, headings sized for the drawer, long text folded) and is part of task search and context packets.
+    - It is set when creating a task (in the app or by Claude) and edited by the creator and admins.
+  - **Claude's task tools:**
+    - Every field says what it is for; the definition of done is a short checklist (up to 1,500 characters when creating), and the real defaults are stated.
+    - Creating and updating reply with the task as saved, line breaks kept, so Claude can check it and fix it with update_task.
+    - get_task keeps line breaks too.
+  - **Guard:** any Claude tool refuses text holding leftover tool-call markup (or a closing tag named after one of the call's own fields), so nothing garbled is saved. Code blocks and inline code are exempt, so the syntax can be written on purpose.
+  - **App:** the outcome, definition of done, and evidence show their line breaks.
+  - **Also:**
+    - Claude's instructions now take the only venture without asking, and read the new venture's context when the conversation switches.
+    - post_message tells Claude to write @handles so mentions show names.
+  - **Verified:**
+    - API tests cover Details permissions and clearing, the guard's shapes and exemptions, the read-back, and line breaks. The backend smoke passes; the search index is replaced in place on an existing database.
+    - In the browser: the drawer and the edit form. Web typecheck, lint, and build pass.
+    - An independent review's findings are fixed.
+- [x] Task window, and deleting a task with Undo (2026-10-10), built and tested locally, not yet live.
+  - **Window:** a task opens in a centred window instead of the side panel, with tabs for Overview, Activity, Evidence, and Files.
+    - Status, blocker, people, and the plan sit in a side column. On phones the window is full screen and they move to a "Status & people" tab.
+    - A ⋯ menu holds Edit details, Copy link, and Delete task. Links can open a tab (`?task=…&tab=activity`).
+    - Escape, the focus trap, and the menu work from the keyboard. Closing with unsaved text asks first, and a refresh keeps unsaved status and people picks.
+    - The work flow and statuses are unchanged.
+  - **Deleting:** the creator (a contributor or venture head) or an admin deletes a task. Claude can't.
+    - Its comments, evidence, files, reminders, and notices go with it. Other tasks stop depending on it, and links to it elsewhere are cleared.
+    - Everything is kept for 30 days as a recovery copy. The toast's Undo (by whoever deleted it, or an admin) brings it all back, but not dependencies on tasks deleted since.
+    - Deleting and restoring run in one transaction, re-checking the person's membership. Comments and evidence touch the task in the same transaction, so a delete can't orphan them.
+  - **Claude's task updates:** get_task warns when saved text holds leftover tool-call markup. The guard's refusal explains how to fix text copied from it, so update_task can clean an old garbled task.
+  - **Verified:**
+    - API tests cover delete and restore permissions, the cleanup and its undo, dependencies, a second undo, an admin's delete, and the get_task warning and cleanup. All 20 API tests pass on a replica set, and the backend smoke passes.
+    - In the browser:
+      - tabs, comments, and the phone layout;
+      - delete, then Undo (once, even when clicked twice), then Open, then Back closing it;
+      - Escape and Tab from the page body, Tab inside a window above it, and the menu's keyboard and outside click;
+      - closing clears the link.
+    - Web typecheck, lint, and build pass.
+    - Two independent reviews' findings are fixed. The role check is repeated inside the transaction, so someone demoted meanwhile can't delete or restore.
+- [x] Task list: open work first, soonest due, with lists and filters (2026-10-10), built and tested locally, not yet live.
+  - **Lists:** Open (the default: not done, cancelled, or parked), Needs my review, Overdue, Done, and All, with counts on the tabs.
+    - Needs my review shows open tasks with evidence waiting that you may accept or reject, by the same rules as reviewing it.
+    - Done lists the most recently finished first and says when each was finished.
+  - **Order:** soonest due by default, under Overdue, Today, Next 7 days, and Later headings. Most urgent, recently updated, and newest are the other sorts.
+  - **Rows:** say "Overdue by 3 days" in red, "Due today, 5:00 PM", or "Due tomorrow", counting calendar days.
+  - **Filters:** Assigned to me, any assignee, status, priority, and due today or in the next 7 days. Picking a status a list can't hold moves to All.
+  - **Search:** titles, outcomes, and tags.
+  - **Link:** the list, sort, filters, and search live in the link, so it can be shared, and closing a task keeps them.
+  - **Server:** sorting, filtering, search, and counts run on the server, so they stay right past the first 100 tasks.
+    - Sorted lists page by their sort values and id, so a page never repeats or skips a task, and a cursor from another sort is refused.
+    - Without a sort, the list behaves as before, so the board, dashboard, and other callers are unchanged.
+    - Claude's list_tasks gains the same lists (open, needs_my_review, overdue, done, all), sorts (soonest due by default), and search.
+  - **Verified:**
+    - An API test covers each list, who sees Needs my review, paging across equal due dates and every sort, search with regex characters, counts, bad cursors, and the unsorted list. All 21 API tests pass on a replica set, and the backend smoke passes.
+    - In the browser: every list, the headings and counts, each filter, search, sort, the empty states, Clear, a shared link, opening a task and accepting its evidence from Needs my review, and the phone layout. Web typecheck, lint, and build pass.
+    - An independent review's findings are fixed:
+      - a search pause no longer brings back cleared filters;
+      - a late "Load more" can't mix old rows in;
+      - cursors are tied to their sort, and a null character in search is refused;
+      - switching lists reloads only the tasks;
+      - Needs my review through Claude leaves out the person's own work.
+- [x] Leaderboard, and a "Top performers of the week" edition every Saturday (2026-10-10), built and tested locally, not yet live.
+  - **Score:** fair whatever the workload.
+    - 70% on time: each task due earns full credit on time, 0.75 up to a day late, 0.5 up to three days, 0.25 later, and nothing if not delivered. Bigger tasks (by estimate, capped) count more.
+    - 30% right first time: evidence accepted without being sent back.
+    - Each rate is evened out toward the team's by five tasks' worth, and people are ranked from two tasks.
+    - A task counts in the period it settled: when it was handed in, if early, otherwise when it was due. Finishing early counts straight away.
+  - **Not their fault, not counted:**
+    - Work counts as delivered when the accepted evidence was sent, not when it was reviewed.
+    - Blocked time, and the shortfall when a task was given with less time than its estimate, move the due date back.
+    - Cancelled, parked, and draft tasks don't count.
+  - **Leaderboard page (sidebar):**
+    - A podium for the top three and a list below, with on time, right first time, delivered, and a trend against the period before.
+    - Lifetime standings (every task to date), with arrows for each person's move since Saturday, and a toggle to include learners. It follows the venture switcher.
+    - Side cards: Most delivered, Top reviewers, and how scores work.
+    - Clicking a person shows the tasks behind their score; tasks the viewer can't open are only counted.
+    - Everyone sees everyone's ranking.
+  - **Weekly edition:**
+    - Weeks run Saturday to Friday (LEADERBOARD_TIME_ZONE, default Asia/Kolkata). The first open after Saturday midnight makes the edition: the lifetime standings as of that midnight, with each person's move since the Saturday before, then kept as it was.
+    - Each person's first open of the app after that shows it once, then continues to where they were going.
+    - It has gold, silver, and bronze cards for the top three, ranks 4 to 10, and the week's most delivered and top reviewer, with or without learners.
+  - **Verified:**
+    - An API test covers each scoring rule with a fixed clock (slow review, blocked time, short deadline, redone evidence, missed work, evening out, ranking threshold, learners, reviewers) and the Saturday week boundary.
+    - It also covers who sees what (venture boards, hidden tasks in the breakdown), the edition being made once and kept, and seen per person. All 22 API tests pass on a replica set, and the backend smoke passes.
+    - In the browser: the redirect on a Saturday open, Continue, no second redirect, the daily page, the breakdown, learners, periods, the phone layout, and dark mode. Web typecheck, lint, and build pass.
+    - An independent review's findings are fixed:
+      - evidence waiting for review counts as handed in, not missed;
+      - the edition is as of Saturday midnight, whenever it's first opened, and its breakdown follows it;
+      - blocked time only pauses the clock for a block begun before the task was late, for a week at most;
+      - reviewing your own evidence isn't a review, and equal scores share a rank;
+      - "Continue" only goes to a page inside the app;
+      - the board says which venture it shows.
+  - **Follow-up (2026-10-10):**
+    - Both boards are lifetime (every task to date). The Saturday edition shows the standings as the week closed, with each person's move that week; an edition made under the old weekly rules is remade once.
+    - The everyday leaderboard is full screen in its own design (after the green podium reference): avatars on frosted podium steps 2-1-3, then the list on a sheet below. The Saturday page keeps the trophy cards.
+    - Both leaderboards fill the whole content area edge to edge (no card or margins), with a slowly moving dither in the background: white dots on the green stage, gold on the Saturday poster. It stays still with reduced motion and pauses while the tab is hidden.
+    - Early work counts when it's handed in, and the minimum is two tasks. The live workspace had 13 of its 15 tasks due later, so no one could be ranked yet.
+    - Lateness reads in minutes, hours, or days, and someone not ranked yet shows no score.
+    - Verified: the API test (early hand-ins, hand-ins before the period, ties sharing a rank, one task not enough) and the browser on a copy of the live situation, desktop and phone. All 22 API tests, lint, typecheck, and build pass.
+  - **Opening film (2026-10-10):** every time either leaderboard opens (and on Replay), a short film of about ten seconds builds the board before it appears.
+    - The story: a line of light opens onto the stage and the title slams in. Everyone pops on as the counts tick up. The board forms as a race, rows overtaking as their scores run up, then locks. The rest step down to a strip, 3rd and 2nd rise on their steps, a drumroll and spotlights fall on the empty top step, and the winner launches up with a flash, confetti, a fanfare, and a crown. It shows your place, then dissolves into the live board. The Saturday edition has its own gold version.
+    - Its own score, made in the browser with no audio files: A minor resolving to C major on the winner at 120 bpm, with whooshes, hits, pops, ticks, a drumroll, chimes, and sparkle, each timed to the picture. Sound is on by default, with a mute that's remembered. If the browser holds sound back until a click, the button says "Tap for sound".
+    - Skip or Escape at any time. It holds on the title while the board loads, gets out of the way if loading fails, waits until a background tab is seen, ends if the tab is hidden, and is left out for reduced motion.
+    - Verified in the browser frame by frame on a throwaway stack: nine ranked with a tie, two not ranked, you in 5th; one person; no one ranked; slow and failed loads; phone, upright and on its side; mute, Tab, Escape; reduced motion. The soundtrack was rendered offline (peak 0.91, no clipping). Lint, typecheck, and build pass.
+    - An independent review's findings are fixed:
+      - focus goes back to where it was (or to Replay);
+      - a sound the browser starts a moment late still plays;
+      - the week is marked seen only once the poster is on screen;
+      - the race and podium fit short screens;
+      - the sound button has one clear name.
+- [x] Task celebrations (2026-10-11): when a task assigned to someone is finished, they get a short film on whatever page they have open.
+  - **When:** the first of its evidence being accepted (or an exception recorded) or it being marked done; once per task, whoever does it (in the app or through Claude).
+    - It plays the moment it happens: the server nudges that person's open tabs over the live connection.
+    - Otherwise it plays when the app opens, comes back into view, or within a few minutes. Anything from the last three days that hasn't been seen plays then.
+    - Several waiting at once share one film. It waits for a clear moment: the tab in view, no leaderboard film playing, and not while they're typing.
+  - **The film:** a ten-second montage cut to the beat of its own track.
+    - The opener is a stamp, a check that draws itself, or a word. Then come four quick cuts of hype words and what happened ("2 DAYS EARLY", "FIRST TRY", "5 IN A ROW", "#25").
+    - Next, the task on a card with a DONE badge, and two stats that count up (on time in a row, this week, how early, who approved it, total).
+    - Then their avatar and a line for them, word by word, and a sign-off with confetti.
+    - Each play picks its opener, colours, backgrounds, transitions, key, chords, and groove at random.
+    - The lines come from a library of over a hundred, grouped by what happened: early, on time, late but done, first time right, approved by someone, streaks, milestones, a big week, several at once, a big task, the time of day, and the day of the week. What this browser saw lately is left out.
+    - Big type fits any window.
+  - **Pause:** for an hour, 3 hours, or a day, from the film, with Undo. It's kept on the account, so it holds on every device. Anything finished meanwhile is skipped, not saved up. Sound has its own mute. Reduced motion gets a notice with the same line instead of the film.
+  - **Verified:**
+    - An API test: approval celebrates the assignee and nudges their open tab at once; marking it done later doesn't repeat it; marking another done does; sent-back evidence doesn't. It also checks the film's facts (venture, first time right, who approved, how early), the stats, that only the person sees or clears theirs, that cancelled tasks are dropped, and that a pause skips for good and Undo resumes. All 23 API tests pass.
+    - In the browser, on a throwaway stack: an approval by the reviewer played the film 0.17 s later on the Tasks page. Every shot fits a phone and an 800×450 window across several random edits. Pause with Undo, reduced motion, waiting while typing, and Escape all work. The soundtrack was rendered offline across six edits (peaks 0.83–0.88, no clipping). Lint, typecheck, and build pass.
+    - An independent review's findings are fixed:
+      - the feed follows the same access rule as opening the task, and reading it changes nothing;
+      - it plays the newest five, and checks again just before playing (another tab may have played it), never replaying one in the same tab;
+      - it waits while the Saturday leaderboard is on its way or playing, and while there's unsent text in the box in focus;
+      - a film that can't play, fails, or never ends is taken down after 45 seconds;
+      - after a reconnect it looks again at once.
+- [x] Workspace context and Knowledge fixes (2026-10-11).
+  - **Workspace context:** context files can belong to the whole workspace as well as to one venture.
+    - Claude reads them first for every venture, before that venture's own; they're marked "Workspace:" in what it reads.
+    - Admins and people who share knowledge with every venture write them; everyone in the workspace reads them.
+    - In Knowledge → Venture context, "Context for" offers "Workspace (every venture)" next to the ventures. A venture's view lists the workspace files it starts with, then its own.
+    - The workspace's text counts toward every venture's 500,000-character limit, so Claude's reading stays within reach.
+  - **Dropdown in the upload popup:** the popup's opening animation left an invisible transform behind, which placed the dropdown's options relative to the popup instead of the screen, out of sight. It no longer does. (The New task and calendar popups place their dropdowns differently and weren't affected.)
+  - **Header buttons:** Knowledge's "Upload file" and "New record" add to the Library, so they only show on the Library tab.
+  - **Uploading several files:** "Upload .md files" already took several at once. It was checked with three.
+  - **Verified:** the API test covers who writes and reads workspace context, its place first in a venture's list and in Claude's read, and the shared limit (a file that fits only without the workspace's text). All 23 API tests pass. In the browser, on a throwaway stack: the upload popup's dropdown opens beside its field, the header buttons show only on Library, three files uploaded to the workspace at once, and a venture's view lists them. Lint, typecheck, and build pass.
+    - An independent review's findings are fixed:
+      - only an admin is told which venture a too-big workspace file would overfill, and how full it is;
+      - archived ventures don't count toward the workspace's limit;
+      - a venture head refused for size is told how much of it is the workspace's;
+      - the panel follows the venture switcher.
+- [ ] Go live on the PC: fill `deploy/.env` (domain, Resend, production R2 bucket with CORS and token, backup bucket, tunnel token), run `deploy\prod.cmd up`, then verify first-admin signup, invitations, chat, uploads, email, and push from another device on the public domain; run `verify-backup`; set Docker Desktop to start on sign-in and Windows to never sleep.
+- [ ] Observability dashboards and alerts
+- [ ] Backup/restore and disaster-recovery rehearsal
+- [ ] Security, accessibility, performance, and dependency audits
+- [ ] Cross-browser and critical-path end-to-end test suite
+- [ ] Run the local reminder worker with the preview app and verify in-app delivery, snooze, and completion from a browser session
+- [ ] Show newly delivered in-app notifications without manual refresh (unread bell and accessible reminder toast); verify no duplicate initial-load alerts
+- [ ] Staging sign-off and release checklist
+
+
+## Phase 7 — Sales (Dealflow)
+
+Spec: `docs/sales-dealflow.md`. Built 2026-10-09 on the local dev stack (standalone MongoDB, dev auth) against the owner's real leads imported into `vso_dealflow_dev`. Uncommitted, awaiting the owner's review.
+
+- [x] Contracts: SLS-01 stages with legacy names, leads, activities, Claude verdicts, drafts, plays, find-lead runs, brain items, do-not-contact list, overview; partial updates never re-apply defaults
+- [x] API under `/v1/sales`: permissions by venture role, automatic stage rules, separate-session review, first-batch approval, WhatsApp only after a person-confirmed opt-in, one do-not-contact list, soft delete, won notices, delivery work as a task, idempotent writes; legacy `/pipelines` and `/opportunities` kept (bounded)
+    - `sales.test.ts` + `mcp-sales.test.ts` 32/32 on a standalone MongoDB; the five replica-set cases in `api.test.ts` are unchanged and still need a replica set.
+- [x] Claude's hosted MCP tools (`tools-sales.ts`): work and review sessions, verdicts with quoted evidence, drafts, reviews, replies, calls, leads, plays, find-lead plans, brain proposals; no send, approve, veto, override or won-stage tools; the loopback allowlist excludes app-only routes
+- [x] Web: one Sales item with Overview (phone "On the go"), Leads table and lead drawer, Review split view, Inbox, Pipeline board, Plays, Calls, Find leads, Brain; desktop and 375px phone, light and dark
+    - Live checks (Prospector `tooling/vso-qa`): API flow 42/42 as every role, connector flow 15/15 over HTTP, click-through desktop and phone, WhatsApp consent 9/9, screenshots of every page with no console errors or failed calls. Web typecheck and lint pass; no production build was run (low disk).
+- [x] Independent review (2026-10-09): no Critical; three High and nine Medium findings fixed and re-tested (Claude self-granted WhatsApp consent, cross-venture do-not-contact removal, Claude reopening or overriding a person's decisions, double mark-sent, suppression matching, mailto parameters, phone approval from a snippet, import refresh)
+- [x] Import of the Dealflow SQLite (read-only) with guards: production, non-local hosts and non-`_dev` databases refused; re-runs never overwrite app edits
+- [x] Studio | Sales mode switch at the top of the sidebar (owner's pick A): Sales mode has its own menu with live counts, Shared group (Calendar, Knowledge, Messages, Notifications, People & access) in both, "Sales knowledge" naming, top bar Add lead and lead search; verified desktop, phone drawer, collapsed rail, dark
+- [x] Two Claude connectors: Venture Studio (`/mcp`, no sales or deal tools) and Dealflow Sales (`/mcp/sales`, sales tools + venture/person lookups); Connect Claude page shows both with one-click keys; connector flow 16/16
+- [x] Studio | Sales modes, two Claude connectors (`/mcp` Venture Studio, `/mcp/sales` Dealflow Sales), guided `start_sales` with say/next, MCP Apps cards, `search_companies` (TinyFish/Exa keys optional), `weekly_report` and `daybreak` tools, Sales OS guide and Claude Code skill
+- [x] Office PC engine bridge: `/v1/sales/engine/*` (engine-scoped tokens, atomic claims, find and enrich runs) plus the Prospector worker (`dealflow_backend.vso_bridge`, 50 tests); Find leads page shows live runs and queues contact look-ups
+- [x] Reminders and notices (next action, reply, approval, needs you), per-venture sales settings (working days, blackouts, caps, channels, approval mode) with a setup checklist and banner
+- [x] Revenue layer (value, close date, probability, lost reasons, board totals, forecast card), lead drawer redesign (identity header, at-a-glance tiles, tabs, action bar), filters by state, city, industry and contact, bulk actions, CSV export and import, saved views, Do-not-contact page, Inbox reply clock, Reports with Claude calibration, Sales knowledge two-pane page
+- [x] Independent audits round 2 (engine, settings, notices, reports, connector, web) and round 3 (bulk, CSV, import, views): 1 high and 7 medium findings fixed in round 2, 1 high and 4 medium in round 3, plus lows; all with regression tests
+    - 2026-10-10 final check: API suites 47 + 9 + 10 + 18 + 3 + 13 pass one at a time; `tooling/vso-qa/run-all.mjs` all ok (API flow 42/42, connector 16/16, click-through desktop and phone, consent 10/10, 56 screenshot views with no page errors); typecheck and lint clean for API, worker and web. Still uncommitted.
+- [x] Hardening after the merge into `main` (2026-10-11):
+  - **Finder safety:** the lead finder's page reader and bot-check scan in time linear in the page (a hostile 1.5 MB page took minutes and froze the API).
+  - **Saved plans:** Claude's saved find plans can be queued in the app (`POST /v1/sales/find-runs/:id/queue`, planner or head, never Claude).
+  - **Chat search:** company search from chat is refused for learners, uses at most 1,000 of each allowance (the rest stays for the finder), and no longer counts refused calls or misreports a race on the period's first call.
+  - **Duplicates:** references are unique per venture; a company-name match needs the same city (as `Indore, MP` = `Indore`) in the finder, the engine and `add_leads`.
+  - **Delete, import, startup:**
+    - Venture delete also removes sales settings and import records.
+    - A crashed CSV import never doubles leads on retry.
+    - The API brings older deal records to the Sales model at start.
+  - **Smaller fixes:**
+    - Missing indexes.
+    - The leaderboard stays a Studio page (and `/leaderboard` redirects).
+    - Overview reads shared while in flight.
+    - Reply-time text from each venture's hours.
+    - Delivery tasks in the venture's time zone.
+    - Owner names past 100 members.
+    - The Reports Speed section fits a phone.
+    - A bare "mark sent" is a manual send.
+    - The QA scripts never notify real people or hard-delete a real "QA …" company.
+  - **Verified:**
+    - API suites 164/164 on a replica set; typecheck and lint clean.
+    - An independent review (2 issues found and fixed).
+    - Three smoke agents on an isolated stack: Sales API about 300 checks, Studio regression and both connectors, and screens on desktop and phone as head, admin and learner. All passed.
+    - Close dates stay on India time end to end (the forecast and export count them there).
+- [ ] Owner walkthrough and refinements
+- [ ] Run against a MongoDB replica set (transactions) and repeat the live checks
+- [ ] Email lane: send from each person's own mailbox over SMTP (off until the owner switches it on per venture)
+- [ ] WhatsApp Cloud API lane: webhook (verify token, signature check, de-duplication), templates, 24-hour window (off until the owner has the business number)
+- [ ] Office-PC engine bridge: pick up queued find-lead runs and add leads with contact routes from the company's own pages
+- [ ] Deploy with the production stack and connect Claude on claude.ai for each teammate

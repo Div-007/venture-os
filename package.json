@@ -1,0 +1,32 @@
+{
+  "name": "venture-studio-os",
+  "version": "0.2.0",
+  "description": "Venture Studio OS: one shared memory for a team's AI, and the work it runs.",
+  "private": true,
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build:packages": "npm run build --workspace @venture-studio/contracts && npm run build --workspace @venture-studio/core",
+    "build": "npm run build:packages && npm run build --workspace @venture-studio/api --workspace @venture-studio/worker --workspace @venture-studio/web",
+    "typecheck": "npm run build:packages && npm run typecheck --workspaces --if-present",
+    "test": "npm run build:packages && npm run test --workspaces --if-present",
+    "smoke:backend": "npm run build --workspace @venture-studio/contracts && npm run build --workspace @venture-studio/core && npm run test --workspace @venture-studio/core && npm run test --workspace @venture-studio/api && npm run test --workspace @venture-studio/worker && npm run typecheck --workspace @venture-studio/api && npm run typecheck --workspace @venture-studio/worker",
+    "dev:web": "npm run dev --workspace @venture-studio/web",
+    "build:web": "npm run build --workspace @venture-studio/web",
+    "lint:web": "npm run lint --workspace @venture-studio/web",
+    "smoke:web": "npm run lint:web && npm run build:web"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0"
+  },
+  "dependencies": {
+    "mongodb": "^6.21.0"
+  }
+}

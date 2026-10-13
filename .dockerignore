@@ -1,0 +1,16 @@
+# Venture Studio OS: keep secrets, local data, and build output out of image builds.
+**/node_modules
+**/.next
+**/.next-preview
+**/dist
+**/coverage
+**/*.tsbuildinfo
+**/*.log
+.git
+.claude
+**/.data
+**/.env
+**/.env.*
+!**/.env.example
+deploy/backup
+deploy/mongo

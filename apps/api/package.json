@@ -1,0 +1,36 @@
+{
+  "name": "@venture-studio/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/src/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/src/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test test/api.test.ts test/sales.test.ts test/mcp-sales.test.ts test/mcp-sales-guided.test.ts test/sales-engine.test.ts test/sales-reports.test.ts test/sales-io.test.ts test/sales-offers.test.ts test/sales-search-keys.test.ts test/sales-finder.test.ts",
+    "seed": "tsx src/seed.ts",
+    "migrate": "tsx src/migrate.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1138.0",
+    "@aws-sdk/s3-request-presigner": "^3.1138.0",
+    "@better-auth/mongo-adapter": "^1.7.5",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@venture-studio/contracts": "0.1.0",
+    "@venture-studio/core": "0.1.0",
+    "better-auth": "^1.7.5",
+    "express": "^5.2.1",
+    "mammoth": "^1.13.0",
+    "mongodb": "^6.21.0",
+    "sharp": "^0.35.4",
+    "socket.io": "^4.8.3",
+    "unpdf": "^1.8.1",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "socket.io-client": "^4.8.3"
+  }
+}

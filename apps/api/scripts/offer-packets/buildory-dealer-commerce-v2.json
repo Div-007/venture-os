@@ -1,0 +1,80 @@
+{
+  "name": "Dealer Commerce",
+  "change": "One packet replacing the old offer, the four target profiles, the qualification rubric and the message rules, with their 20 conflicts settled (proposed by Claude on 11 Oct 2026). G9 Raipur, G4 dealer login and a G1 branch office become Holds for Divyansh instead of rejects. Buckets A, B and C and Tier B distributors are full targets. A Gmail address on the company's own site counts. One proof phrase. At most 5 WhatsApp first touches a day. Divyansh approves each play's first batch, then Claude's review is enough.",
+  "packet": {
+    "summary": "A catalog-to-order system for owner-led suppliers that sell through dealers, in Chhattisgarh, Madhya Pradesh, Maharashtra and Odisha.",
+    "whoFor": {
+      "description": "Owner-led or mid-sized makers, distributors, wholesalers and stockists whose head office, or the office where the owner sits, is in Chhattisgarh, Madhya Pradesh, Maharashtra or Odisha (demos are in person). They sell physical goods through dealers, retailers or sub-dealers, and run catalog, rate-list, enquiry and order steps over calls, WhatsApp, PDFs or spreadsheets. Two tiers, both full targets: Tier A manufacturers (small fabricators with dealers included) and Tier B regional distributors, wholesalers and stockists that supply sub-dealers or retailers. Fit is workflow similarity (dealers, a real catalog, different prices for different buyers, staff handling enquiries and orders), not the industry name. Buckets: A agri equipment, pumps, irrigation, pipes and fittings; B solar, inverters, batteries, farm electrical; C hardware, electrical, plumbing, sanitaryware, building materials.",
+      "industries": ["agricultural equipment", "pumps", "irrigation products", "pipes and fittings", "solar pumps", "solar inverters and structures", "batteries", "farm electrical", "electrical goods", "hardware", "plumbing products", "sanitaryware", "building materials", "spare parts", "fasteners"],
+      "customerTypes": ["manufacturer", "distributor", "wholesaler", "stockist", "authorised distributor", "dealer network supplier"],
+      "places": ["Chhattisgarh", "Madhya Pradesh", "Maharashtra", "Odisha", "Raipur", "Indore", "Nagpur", "Bhopal", "Pune", "Nashik", "Kolhapur", "Bhubaneswar", "Bilaspur", "Jabalpur", "Aurangabad", "Jalgaon", "Bhilai", "Durg", "Pithampur", "Dewas", "Sangli", "Ahmednagar", "Cuttack", "Rourkela"],
+      "companySizes": ["Owner-led or mid-sized firm with its own website and a published enquiry route", "Signals of scale: branches, towns or states served, a stated dealer count, a large model or SKU catalog, a GST-registered company, years in business", "A very small single workshop is allowed but scores low on size and budget", "A large national brand is rejected under G3"],
+      "buyerRoles": ["Owner, proprietor or founder (decision and budget; in family firms elders or the munim may decide)", "Managing director, director or partner", "State head, sales head, distribution head or dealer-network manager", "General manager or operations head", "A role mailbox or enquiry WhatsApp is a channel, not a decision-maker: address the message to the owner"]
+    },
+    "gates": [
+      { "code": "G1", "rule": "The head office, or the office where the owner sits, is in Chhattisgarh, Madhya Pradesh, Maharashtra or Odisha.", "ifFails": "reject", "note": "Only a branch in the four states: Hold, and ask who decides." },
+      { "code": "G2", "rule": "Sells through dealers, retailers, sub-dealers or wholesale buyers.", "ifFails": "reject", "note": "Only a bulk or wholesale enquiry route and no dealer words: unclear, Hold." },
+      { "code": "G3", "rule": "Owner-led or mid-sized, not a large national brand (a listed company, or a pan-India maker with its own dealer portal or app).", "ifFails": "reject", "note": "" },
+      { "code": "G4", "rule": "Has no dealer portal, Dealer Login or dealer-ordering product already in use (Marg eOrder, BizOm, FieldAssist, Botree, Dealerbuddy).", "ifFails": "hold", "note": "Ask: is it in use, and what does it cover? Not an automatic reject." },
+      { "code": "G5", "rule": "Regulated products (pesticides, fertiliser, seeds, agrochemicals, pharma) are not the main business.", "ifFails": "reject", "note": "Mixed shops where pumps, pipes or equipment dominate pass." },
+      { "code": "G6", "rule": "Not already in the pipeline, never opted out, never disqualified before.", "ifFails": "reject", "note": "The app checks this and the do-not-contact list." },
+      { "code": "G7", "rule": "A business contact route published on its own site or an official listing: an enquiry WhatsApp, a phone, a business email or an enquiry form.", "ifFails": "reject", "note": "A Gmail or similar address published on its own site counts. Never a guessed email or a personal profile." },
+      { "code": "G8", "rule": "The main visible need is not an offer exclusion (Tally or ERP sync, credit, delivery tracking, schemes, field sales).", "ifFails": "reject", "note": "Unsure: Hold." },
+      { "code": "G9", "rule": "Not an agri, pump or irrigation business in Raipur city (Urla, Siltara, Bhanpuri, Borjhara and Rawabhata included), and not a look-alike rival of the reference client anywhere (same products, brands or dealers).", "ifFails": "hold", "note": "Flag for Divyansh with the question: is this a rival of our reference client? Never a reject on G9 alone." }
+    ],
+    "signals": {
+      "lookFor": [
+        { "phrase": "become a dealer", "meaning": "Recruits dealers" },
+        { "phrase": "dealer enquiry", "meaning": "Takes dealer enquiries" },
+        { "phrase": "dealers wanted", "meaning": "Is growing its dealer network" },
+        { "phrase": "distributor enquiry", "meaning": "Takes distributor enquiries" },
+        { "phrase": "our dealers", "meaning": "Sells through a dealer network" },
+        { "phrase": "dealer network", "meaning": "Sells through a dealer network" },
+        { "phrase": "dealer locator", "meaning": "Lists its dealers by place" },
+        { "phrase": "price list", "meaning": "Shares a price list" },
+        { "phrase": "rate list", "meaning": "Shares a rate list" },
+        { "phrase": "call for price", "meaning": "Gives prices on request" },
+        { "phrase": "WhatsApp for price", "meaning": "Takes price requests on WhatsApp" },
+        { "phrase": "download catalogue", "meaning": "Publishes a catalogue" },
+        { "phrase": "bulk enquiry", "meaning": "Takes bulk orders" },
+        { "phrase": "request a quote", "meaning": "Quotes on request" },
+        { "phrase": "brands we carry", "meaning": "A multi-brand distributor" },
+        { "phrase": "authorised distributor", "meaning": "Distributes for a brand" },
+        { "phrase": "sub dealers", "meaning": "Supplies sub-dealers" },
+        { "phrase": "wholesale price", "meaning": "Sells wholesale" },
+        { "phrase": "channel partner", "meaning": "Works through channel partners" },
+        { "phrase": "where to buy", "meaning": "Points buyers to dealers" }
+      ],
+      "searchWords": ["dealer enquiry", "manufacturer", "distributor", "wholesaler"],
+      "negatives": ["pesticide formulations", "fertiliser manufacturing", "agrochemical formulations", "pharma manufacturing"]
+    },
+    "exclusions": [
+      "A directory, marketplace, listicle, news or market-research page instead of the company's own site; a government body; a single counter with no dealers, retailers or wholesale buyers.",
+      "Wants an instant generic online store with no discovery.",
+      "Nobody owns catalog and orders.",
+      "FMCG or packaged-goods distributors: weak fit, score low; not excluded."
+    ],
+    "say": {
+      "valueProposition": "One traceable path from the right product and the right dealer price to an order with a visible status, set up around how the supplier already works. Orders that arrive on WhatsApp and phone land in one place; the books stay where they are; we do the setup. Any improvement is a hypothesis measured against the client's own baseline. Buildory maps and builds a connected catalog-to-order workflow: the current catalog and the right dealer price, then the enquiry or quote, the negotiation or approval, the order and its visible status. Every engagement starts with workflow discovery and a written scope.",
+      "pitchAngles": [
+        "Open with one signal seen on their own site (with its URL), then ask how prices, enquiries and orders move today.",
+        "Discover: how do enquiries, negotiation and approvals become orders, and who owns each step? Ask, don't assert.",
+        "Close: offer a 20-minute workflow-mapping call before any solution or quote."
+      ],
+      "proofWords": "a demo version of a system we built for a dealer-network supplier in Chhattisgarh, shown privately",
+      "approvedClaims": ["Buildory maps and builds scoped business software around the client's own process, and does the setup."],
+      "claimsToAvoid": [
+        "Guaranteed sales, savings, ROI or dealer adoption.",
+        "\"Ready-made\", \"white-label\" or \"works for every industry out of the box\".",
+        "The reference client's name, logo, screenshots, sector or results (no permission recorded).",
+        "Tally or ERP sync, inventory, delivery tracking, credit, schemes, loyalty or field-sales features.",
+        "A fixed price, scope or date before discovery and a technical review.",
+        "That a business has a problem because a signal is visible: a signal is a reason to ask, not proof."
+      ]
+    },
+    "messages": "Claude drafts; a separate Claude chat reviews; a person sends from their own mail or phone and marks it sent.\n\nAPPROVAL: Divyansh reads and approves the first batch of every play (its follow-up included). After that a separate Claude review is enough (Sales settings: \"Claude's review is enough once a play's first batch has been read\"). Any change to a play's template wording goes back to Divyansh.\n\n## Structure (five parts, in order)\n1. The signal seen on their own site.\n2. A question (ask, never tell).\n3. What we do: catalog, dealer rate, order and visible status; \"setup hum karte hain\".\n4. The fixed proof words.\n5. One call to action: a 20-minute call.\n\n## Channels\n- Email first: English, under about 100 words; the subject names their situation; no link and no attachment.\n- WhatsApp only when the business invites it (\"WhatsApp us for price\", a WhatsApp enquiry link): Hinglish, under 60 words, plain text, sent by hand. At most 5 WhatsApp first touches a day per person, inside the app's daily cap (which counts every WhatsApp message). Never a cold first WhatsApp.\n- One channel for the first touch; record it.\n\n## Templates by workflow signal\n- A: \"call for price\", a PDF or a rate list.\n- B: \"dealers wanted\" or a growing dealer network.\n- C: orders taken on WhatsApp or phone.\n\n## Lines\n- Line 1 comes only from the observed signal and its URL, e.g. \"your website says orders are taken on WhatsApp\" or \"Aapki website pe dekha ki dealers PDF rate list use karte hain\". Prefer what a local would notice: dealer count, brands carried, towns covered, recent expansion.\n- Question, not a claim: \"Rate badalne par dealers tak sahi rate kaise pahunchta hai?\" or \"how does your team keep track of which dealer ordered what, at which rate, and what is still pending?\".\n- What we do: \"We build systems that give each dealer order a clear status from enquiry to confirmation, designed around your existing process, and we do the setup.\"\n- One CTA only: \"Worth a 20-minute call?\" or \"20 minute ki call?\". No demo link, brochure, screenshot, free check or video before call 1.\n- Tone: respectful (\"Hi Sir\", \"Namaste ji\"), plain, a person not an advert. Orders from WhatsApp and phone land in one place, alongside their books; never \"replace WhatsApp\" or \"replace Tally\".\n\n## Follow-up and replies\n- One follow-up after 4 working days of silence, same channel, adding something useful tied to their signal (a short tip or example), using the play's approved follow-up step. Then stop. An opt-out means do-not-contact, for good.\n- Warm replies within 2 working hours. \"Haan ji, dekhte hain\" is a soft maybe. Stage \"thinking\": a useful touch every 1-2 weeks; lost on a clear no or after 60 days with no engagement.\n\n## Timing\nFestivals are warnings, not blockers. No new first contacts on 2026-10-20 (Dussehra) or from 2026-11-06 to 2026-11-11 (the Sales settings blackout dates). Expect slow replies around Navratri and Diwali.\n\n## Reference client\nNever named in any message. On calls, describe it as \"a dealer-network supplier in Chhattisgarh\" until Divyansh records permission to name it.\n\n## Review checklist (about 2 minutes)\n- The signal matches the research and its URL.\n- It asks, it doesn't tell.\n- Fixed proof words only.\n- No exclusion feature, price, number or date.\n- Exactly one CTA.\n- The right language and length for the channel.\n- No link or attachment.\n- It sounds like a person.\n\n## Never in a message\n- The reference client's name or sector; \"live\", \"in daily use\", \"delivered\", \"ready-made\", \"white-label\".\n- Any number: client count, dealer count, result, saving or sales increase.\n- A price, timeline or date; links, attachments or screenshots before call 1.\n- A second call to action, fake urgency or scarcity, guilt; high-volume blasts, more than one follow-up, cold calling.",
+    "price": "No price in first outreach. The model is a setup fee plus a monthly fee, GST separate, with no hidden charges. Explain the structure only when asked; amounts come only in the written scope after discovery and a technical review. Never reuse the reference client's price.",
+    "scoring": "Only when every gate passes: 1 weak, 2 some, 3 strong, maximum 15. A sorting order, never a probability, never a rescue for a failed gate.\n- Dealer-network strength (fit)\n- Ordering-workflow signal (need)\n- Closeness to the demo (fit)\n- Size and budget plausibility (ability)\n- Reachability (access)\n\nDecisions: Recommend (medium or high confidence) moves the lead to approved for contact, and Divyansh can override any verdict. Hold waits for Divyansh with the written question. Reject is \"Not a fit\", naming the failed gate. A national brand, low confidence or conflicting evidence is never a Recommend.\n\nRow discipline: a verbatim quote and URL for every claim (\"none seen\" instead of a guess); the hypothesis starts with \"May\"; a failed gate is rejected, never hidden; the decision-maker is a role; the contact route is a published business route with its URL; the opening line uses only the observed signal; nothing from behind a login; the reference client is never named.",
+    "notes": "Roll-out order: Chhattisgarh first, then Madhya Pradesh, Maharashtra and Odisha. Batch mix when there is enough choice: 4 bucket A, 3 bucket B and 3 bucket C per 10. Seed lists: public lists and brand dealer-locator pages (Finolex, CRI, Aqua, Kirloskar) may be read for business fields only (company, city, state, products, website, source URL, list date), with robots.txt respected; contacts come only from the company's own site. The reference implementation is internal (see the shared note on the reference client)."
+  }
+}

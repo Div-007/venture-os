@@ -1,0 +1,16 @@
+# Venture Studio OS: dependencies, build output and local files stay out of Git.
+node_modules/
+.next/
+**/.next/
+**/.next-preview/
+dist/
+**/dist/
+.env
+.env.*
+!.env.example
+.data/
+coverage/
+*.tsbuildinfo
+*.log
+.DS_Store
+Thumbs.db

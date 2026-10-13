@@ -1,0 +1,155 @@
+# Venture Studio production stack for one machine (Docker Desktop on Windows).
+# Settings come from deploy/.env (create it with: deploy\prod.cmd init). Never commit that file.
+# Day-to-day commands are wrapped by deploy\prod.cmd (up, status, logs, backup, ...).
+name: venture-studio-prod
+
+x-logging: &logging
+  driver: json-file
+  options: { max-size: "10m", max-file: "5" }
+
+x-app-env: &app-env
+  NODE_ENV: production
+  APP_MODE: production
+  MONGODB_URI: mongodb://${MONGO_APP_USERNAME:-venture_app}:${MONGO_APP_PASSWORD:?Run deploy\prod.cmd init}@mongo:27017/${MONGODB_DB:-venture_studio}?replicaSet=rs0&authSource=${MONGODB_DB:-venture_studio}
+  MONGODB_DB: ${MONGODB_DB:-venture_studio}
+  RESEND_API_KEY: ${RESEND_API_KEY:-}
+  EMAIL_FROM: ${EMAIL_FROM:-}
+  VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+
+services:
+  mongo:
+    image: mongo:8.0
+    restart: unless-stopped
+    entrypoint: ["bash", "/deploy/mongo/entrypoint.sh"]
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--keyFile", "/data/configdb/replica.key", "--wiredTigerCacheSizeGB", "1"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?Run deploy\prod.cmd init}
+      MONGO_APP_USERNAME: ${MONGO_APP_USERNAME:-venture_app}
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Run deploy\prod.cmd init}
+      MONGODB_DB: ${MONGODB_DB:-venture_studio}
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+      - ./mongo:/deploy/mongo:ro
+      - ./mongo/init-app-user.js:/docker-entrypoint-initdb.d/10-app-user.js:ro
+    # Not published to the host or network: only the app containers can reach it.
+    healthcheck:
+      # Also creates the one-member replica set on first start.
+      test: ["CMD-SHELL", "mongosh --quiet -u root -p \"$$MONGO_INITDB_ROOT_PASSWORD\" --authenticationDatabase admin --eval \"try { rs.status() } catch (e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'mongo:27017' }] }) } quit(db.hello().isWritablePrimary ? 0 : 1)\""]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+    logging: *logging
+
+  api:
+    build: { context: .., dockerfile: deploy/Dockerfile, target: api }
+    image: venture-studio/api:local
+    restart: unless-stopped
+    depends_on: { mongo: { condition: service_healthy } }
+    environment:
+      <<: *app-env
+      PORT: "4000"
+      APP_ORIGIN: https://${APP_DOMAIN:?Set APP_DOMAIN in deploy/.env}
+      API_ORIGIN: https://${APP_DOMAIN:?Set APP_DOMAIN in deploy/.env}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?Run deploy\prod.cmd init}
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      ALLOW_DEV_AUTH: "false"
+      FILE_STORAGE: r2
+      R2_ENDPOINT: ${R2_ENDPOINT:-}
+      R2_BUCKET: ${R2_BUCKET:-}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID:-}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY:-}
+      # Every request arrives through Cloudflare, which always sets this header to the visitor's address.
+      CLIENT_IP_HEADER: cf-connecting-ip
+      # Claude connections (/mcp, /mcp/sales and the Connect Claude page) stay off until MCP_ENABLED=true is set in deploy/.env.
+      MCP_ENABLED: ${MCP_ENABLED:-false}
+      MCP_WRITES_ENABLED: ${MCP_WRITES_ENABLED:-true}
+      # Company search for the Dealflow Sales connector; blank means off.
+      TINYFISH_API_KEY: ${TINYFISH_API_KEY:-}
+      EXA_API_KEY: ${EXA_API_KEY:-}
+      # The lead finder built into the API (works queued find-leads runs); on unless set to off.
+      SALES_FINDER: ${SALES_FINDER:-on}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4000/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    logging: *logging
+
+  worker:
+    build: { context: .., dockerfile: deploy/Dockerfile, target: worker }
+    image: venture-studio/worker:local
+    restart: unless-stopped
+    depends_on: { mongo: { condition: service_healthy } }
+    environment:
+      <<: *app-env
+      WORKER_ID: worker-1
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VAPID_SUBJECT: ${VAPID_SUBJECT:-}
+    logging: *logging
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      target: web
+      args: { VSO_API_ORIGIN: "http://api:4000" }
+    image: venture-studio/web:local
+    restart: unless-stopped
+    depends_on: { api: { condition: service_healthy } }
+    environment:
+      VSO_API_ORIGIN: http://api:4000
+    # Only reachable from this PC (for checks); the public goes through the tunnel.
+    ports: ["127.0.0.1:${WEB_PORT:-3100}:3000"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/push-sw.js').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    logging: *logging
+
+  backup:
+    build: { context: ./backup }
+    image: venture-studio/backup:local
+    restart: unless-stopped
+    depends_on: { mongo: { condition: service_healthy } }
+    environment:
+      MONGO_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?Run deploy\prod.cmd init}
+      MONGODB_DB: ${MONGODB_DB:-venture_studio}
+      BACKUP_INTERVAL_HOURS: ${BACKUP_INTERVAL_HOURS:-24}
+      BACKUP_KEEP_LOCAL_DAYS: ${BACKUP_KEEP_LOCAL_DAYS:-14}
+      BACKUP_KEEP_REMOTE_DAYS: ${BACKUP_KEEP_REMOTE_DAYS:-30}
+      BACKUP_R2_ENDPOINT: ${BACKUP_R2_ENDPOINT:-}
+      BACKUP_R2_BUCKET: ${BACKUP_R2_BUCKET:-}
+      BACKUP_R2_ACCESS_KEY_ID: ${BACKUP_R2_ACCESS_KEY_ID:-}
+      BACKUP_R2_SECRET_ACCESS_KEY: ${BACKUP_R2_SECRET_ACCESS_KEY:-}
+    volumes:
+      - ${LOCAL_BACKUP_DIR:-../.data/prod-backups}:/backups
+    healthcheck:
+      # Unhealthy when the last good backup is over 26 hours old, the R2 copy failed, or a restore is in progress or failed.
+      test: ["CMD-SHELL", "find /backups/.last-success -mmin -1560 2>/dev/null | grep -q . && [ ! -f /backups/.upload-failed ] && [ ! -f /backups/.restore-in-progress ]"]
+      interval: 10m
+      timeout: 10s
+      retries: 1
+      start_period: 15m
+    logging: *logging
+
+  tunnel:
+    # Pinned; update deliberately (check the cloudflared release notes, then change the tag and run prod.cmd up).
+    image: cloudflare/cloudflared:2026.10.0
+    restart: unless-stopped
+    command: ["tunnel", "--no-autoupdate", "run"]
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:-}
+    depends_on: { web: { condition: service_healthy } }
+    # Started only once TUNNEL_TOKEN is set (prod.cmd adds this profile automatically).
+    profiles: ["tunnel"]
+    logging: *logging
+
+volumes:
+  mongo-data:
+  mongo-config:

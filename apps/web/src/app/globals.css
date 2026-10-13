@@ -1,0 +1,795 @@
+@import "tailwindcss";
+
+/* ── Venture Studio OS — evolved from the AIBOS soft-premium surface ── */
+@theme {
+  /* Fonts */
+  --font-sans: var(--font-jakarta), "Inter", "Noto Sans Devanagari", "Segoe UI",
+    system-ui, sans-serif;
+  --font-mono: var(--font-jbmono), "JetBrains Mono", ui-monospace, monospace;
+
+  /* Brighter money-green accent; primary actions keep white-text contrast. */
+  --color-primary-50: #f0faf2;
+  --color-primary-100: #d8f4df;
+  --color-primary-200: #b6e9c5;
+  --color-primary-300: #8adba4;
+  --color-primary-400: #5acb7e;
+  --color-primary-500: #30af5e;
+  --color-primary-600: #198754;
+  --color-primary-700: #188647;
+  --color-primary-800: #126b3a;
+  --color-primary-900: #0e4f2e;
+
+  /* Semantic — surface / accent / text triples */
+  --color-success-surface: #ecfdf3;
+  --color-success: #16a34a;
+  --color-success-text: #15803d;
+  --color-warning-surface: #fffaeb;
+  --color-warning: #f59e0b;
+  --color-warning-text: #b45309;
+  --color-danger-surface: #fef3f2;
+  --color-danger: #dc2626;
+  --color-danger-text: #b42318;
+  --color-info-surface: #f0faf2;
+  --color-info: #198754;
+  --color-info-text: #126b3a;
+
+  /* AI context uses the same accent instead of a competing purple. */
+  --color-ai-surface: #f0faf2;
+  --color-ai: #198754;
+  --color-ai-text: #126b3a;
+
+  /* Neutrals — grayscale rather than blue slate. */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+
+  --color-canvas: #f7faf8;
+
+  /* Radius — softer, rounder system */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+
+  /* Elevation — layered soft shadows over hairline borders */
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.05), 0 8px 24px -12px rgb(16 24 40 / 0.1);
+  --shadow-card-hover: 0 2px 4px rgb(16 24 40 / 0.06), 0 12px 32px -12px rgb(16 24 40 / 0.16);
+  --shadow-e2: 0 4px 12px rgb(15 23 42 / 0.1);
+  --shadow-e3: 0 8px 24px rgb(15 23 42 / 0.14);
+  --shadow-e4: 0 16px 48px rgb(15 23 42 / 0.18);
+
+  /* Motion */
+  --ease-snappy: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --animate-widget-in: widget-in 280ms var(--ease-snappy) both;
+  --animate-page-in: page-in 180ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@keyframes widget-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.knowledge-tile-preview {
+  transition: border-color 180ms var(--ease-snappy), box-shadow 180ms var(--ease-snappy), transform 180ms var(--ease-snappy);
+}
+@media (hover: hover) and (pointer: fine) {
+  .knowledge-tile:hover .knowledge-tile-preview {
+    border-color: var(--color-primary-400);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
+}
+.knowledge-tile:active .knowledge-tile-preview { transform: scale(.985); }
+@media (prefers-reduced-motion: reduce) {
+  .knowledge-tile-preview { transition: border-color 120ms ease; }
+  .knowledge-tile:hover .knowledge-tile-preview,
+  .knowledge-tile:active .knowledge-tile-preview { transform: none; }
+}
+
+.knowledge-markdown { font-size: .9375rem; line-height: 1.8; overflow-wrap: anywhere; }
+.knowledge-markdown > :first-child { margin-top: 0; }
+.knowledge-markdown :is(h1, h2, h3, h4, h5, h6) { margin: 1.7em 0 .55em; color: var(--color-neutral-900); font-weight: 750; line-height: 1.3; }
+.knowledge-markdown h1 { font-size: 2rem; letter-spacing: -.035em; }
+.knowledge-markdown h2 { padding-bottom: .35em; border-bottom: 1px solid var(--color-neutral-200); font-size: 1.5rem; letter-spacing: -.025em; }
+/* In a drawer (task details), headings stay close to the body size. */
+.knowledge-markdown-compact { font-size: .875rem; line-height: 1.7; }
+.knowledge-markdown-compact :is(h1, h2, h3, h4, h5, h6) { margin: 1.2em 0 .4em; letter-spacing: -.01em; }
+.knowledge-markdown-compact h1 { font-size: 1.15rem; }
+.knowledge-markdown-compact h2 { font-size: 1.05rem; padding-bottom: .25em; }
+.knowledge-markdown-compact :is(h3, h4, h5, h6) { font-size: .95rem; }
+.knowledge-markdown h3 { font-size: 1.2rem; }
+.knowledge-markdown :is(h4, h5, h6) { font-size: 1rem; }
+.knowledge-markdown :is(p, ul, ol, blockquote, pre, table, hr) { margin: 0 0 1.2em; }
+.knowledge-markdown :is(ul, ol) { padding-left: 1.6em; }
+.knowledge-markdown ul { list-style: disc; }
+.knowledge-markdown ol { list-style: decimal; }
+.knowledge-markdown li { padding-left: .2em; }
+.knowledge-markdown li + li { margin-top: .25em; }
+.knowledge-markdown li > :is(ul, ol) { margin: .3em 0; }
+.knowledge-markdown input[type="checkbox"] { margin-right: .4em; accent-color: var(--color-primary-600); }
+.knowledge-markdown a { color: var(--color-primary-700); text-decoration: underline; text-underline-offset: 3px; }
+.knowledge-markdown a:hover { color: var(--color-primary-800); }
+.knowledge-markdown a:focus-visible { outline: 2px solid var(--color-primary-600); outline-offset: 2px; }
+.knowledge-markdown strong { color: var(--color-neutral-900); font-weight: 700; }
+.knowledge-markdown blockquote { padding: .2em 1em; border-left: 3px solid var(--color-primary-500); color: var(--color-neutral-600); }
+.knowledge-markdown code { border-radius: 4px; background: var(--color-neutral-100); padding: .1em .3em; font-family: var(--font-mono); font-size: .88em; }
+.knowledge-markdown pre { overflow-x: auto; border: 1px solid var(--color-neutral-200); border-radius: 12px; background: var(--color-neutral-50); padding: 1em 1.2em; line-height: 1.6; }
+.knowledge-markdown pre code { background: transparent; padding: 0; font-size: .85rem; }
+.knowledge-markdown table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.knowledge-markdown :is(th, td) { border: 1px solid var(--color-neutral-200); padding: .55em .8em; text-align: left; }
+.knowledge-markdown th { background: var(--color-neutral-50); color: var(--color-neutral-900); font-weight: 700; }
+.knowledge-markdown hr { border: 0; border-top: 1px solid var(--color-neutral-200); }
+.knowledge-markdown img { display: block; max-width: 100%; height: auto; border-radius: 8px; }
+
+/* Route staging targets page sections while the shared shell stays still. */
+.vso-route-content { min-height: 100%; }
+.vso-shell-chat .vso-route-content { height: 100%; min-height: 0; }
+.vso-shell-sidebar-slot { transition: width 200ms var(--ease-drawer); }
+.vso-venture-menu { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 260ms cubic-bezier(.2,.8,.2,1), opacity 180ms ease; }
+.vso-venture-menu > div { min-height: 0; overflow: hidden; }
+.vso-venture-menu.is-open { grid-template-rows: 1fr; opacity: 1; }
+.vso-venture-entry { opacity: 0; transform: translateY(-5px); transition: opacity 160ms ease, transform 260ms cubic-bezier(.2,.8,.2,1); }
+.vso-venture-menu.is-open .vso-venture-entry { opacity: 1; transform: translateY(0); transition-delay: calc(var(--venture-index) * 35ms); }
+.vso-toggle { appearance: none; position: relative; width: 38px; height: 22px; flex: none; cursor: pointer; border-radius: 999px; background: #a3a3a3; transition: background-color 180ms ease; }
+.vso-toggle::before { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: white; box-shadow: 0 1px 3px #0003; transition: transform 180ms cubic-bezier(.2,.8,.2,1); }
+.vso-toggle:checked { background: var(--color-primary-600); }
+.vso-toggle:checked::before { transform: translateX(16px); }
+.vso-toggle:focus-visible { outline: 2px solid var(--color-primary-600); outline-offset: 3px; }
+.vso-toggle:disabled { cursor: not-allowed; opacity: .5; }
+.vso-shell-chat[data-chat-motion="idle"] .vso-shell-sidebar-slot { transition: width 240ms var(--ease-drawer); }
+.vso-shell-chat[data-chat-motion="idle"] .vso-shell-sidebar {
+  transition: transform 240ms var(--ease-drawer), opacity 160ms ease-out;
+}
+.vso-shell-chat[data-chat-motion="leaving"] .vso-shell-sidebar-slot {
+  width: 0 !important;
+  transition: width 220ms var(--ease-drawer);
+}
+
+/* Chat takes over the same workspace viewport after the chrome exits. */
+.vso-shell[data-chat-motion="leaving"] .vso-shell-sidebar {
+  transform: translateX(-105%) !important;
+  opacity: 0;
+  transition: transform 220ms var(--ease-drawer), opacity 160ms ease-out;
+}
+.vso-shell[data-chat-motion="leaving"] .vso-shell-topbar {
+  transform: translateY(-105%);
+  opacity: 0;
+  transition: transform 220ms var(--ease-drawer), opacity 160ms ease-out;
+}
+.vso-shell[data-chat-motion="immersive"] .vso-shell-sidebar {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-105%) !important;
+  transition: none;
+}
+.vso-shell-chat .vso-shell-topbar {
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vso-venture-menu, .vso-venture-entry, .vso-toggle, .vso-toggle::before { transition: none; }
+  .vso-shell-sidebar-slot,
+  .vso-shell-chat[data-chat-motion="idle"] .vso-shell-sidebar-slot,
+  .vso-shell-chat[data-chat-motion="leaving"] .vso-shell-sidebar-slot,
+  .vso-shell-chat[data-chat-motion="idle"] .vso-shell-sidebar,
+  .vso-shell[data-chat-motion="leaving"] .vso-shell-sidebar,
+  .vso-shell[data-chat-motion="leaving"] .vso-shell-topbar { transition: none; }
+}
+
+.vso-tab-indicator {
+  opacity: 0;
+  transition-property: transform, width, height, opacity;
+  transition-duration: 180ms;
+  transition-timing-function: var(--ease-snappy);
+}
+.vso-tabs[data-ready="true"] .vso-tab-indicator { opacity: 1; }
+.vso-tabs:not([data-ready="true"]) [role="tab"][aria-selected="true"] { background: var(--color-primary-100); }
+
+/* Spatial cues for occasional overlays; content remains visible without animation support. */
+@keyframes vso-enter-right {
+  from { opacity: 0.88; transform: translateX(18px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes vso-enter-left {
+  from { opacity: 0.88; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes vso-enter-bottom {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes vso-enter-modal {
+  from { opacity: 0; transform: translateY(5px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes vso-enter-popover {
+  from { opacity: 0; transform: translateY(-4px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes vso-enter-card {
+  from { opacity: 0.86; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.vso-enter-right { animation: vso-enter-right 220ms var(--ease-drawer) both; }
+.vso-enter-left { animation: vso-enter-left 220ms var(--ease-drawer) both; }
+.vso-enter-bottom { animation: vso-enter-bottom 440ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+/* "backwards": once in, nothing is left transformed, so menus fixed inside (a dropdown's options) are placed against the screen. */
+.vso-enter-modal { animation: vso-enter-modal 180ms var(--ease-snappy) backwards; }
+.vso-enter-popover { animation: vso-enter-popover 150ms var(--ease-snappy) both; transform-origin: top right; }
+.vso-enter-popover[data-align="left"] { transform-origin: top left; }
+.vso-stagger > * { animation: vso-enter-card 170ms var(--ease-snappy) both; }
+.vso-stagger > :nth-child(2) { animation-delay: 35ms; }
+.vso-stagger > :nth-child(3) { animation-delay: 70ms; }
+.vso-stagger > :nth-child(4) { animation-delay: 105ms; }
+
+/* Exits run about a third faster than entrances. Components set data-state="closing", wait, then unmount. */
+@keyframes vso-exit-right { to { opacity: 0; transform: translateX(22px); } }
+@keyframes vso-exit-modal { to { opacity: 0; transform: translateY(3px) scale(0.985); } }
+@keyframes vso-exit-popover { to { opacity: 0; transform: scale(0.985); } }
+@keyframes vso-exit-bottom { to { transform: translateY(100%); } }
+@keyframes vso-enter-popover-up {
+  from { opacity: 0; transform: translateY(4px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes vso-fade-in { from { opacity: 0; } }
+@keyframes vso-fade-out { to { opacity: 0; } }
+.vso-backdrop { animation: vso-fade-in 200ms ease-out both; }
+.vso-backdrop[data-state="closing"] { animation: vso-fade-out 150ms ease-out forwards; pointer-events: none; }
+[data-state="closing"] .vso-enter-right, .vso-enter-right[data-state="closing"] { animation: vso-exit-right 170ms var(--ease-snappy) forwards; }
+[data-state="closing"] .vso-enter-modal, .vso-enter-modal[data-state="closing"] { animation: vso-exit-modal 130ms var(--ease-snappy) forwards; }
+[data-state="closing"] .vso-enter-bottom, .vso-enter-bottom[data-state="closing"] { animation: vso-exit-bottom 240ms var(--ease-drawer) forwards; }
+.vso-enter-popover[data-side="top"] { animation-name: vso-enter-popover-up; transform-origin: bottom right; }
+.vso-enter-popover[data-side="top"][data-align="left"] { transform-origin: bottom left; }
+.vso-enter-popover[data-state="closing"] { animation: vso-exit-popover 100ms ease-out forwards; pointer-events: none; }
+.vso-fade-enter { animation: vso-fade-in 140ms ease-out both; }
+
+/* Smooth open/close for inline content (banners, confirm rows, fieldsets). Hidden content leaves the tab order once closed. */
+.vso-collapse { display: grid; grid-template-rows: 0fr; opacity: 0; visibility: hidden; transition: opacity 120ms ease-out, grid-template-rows 180ms var(--ease-snappy) 120ms, visibility 0s linear 300ms; }
+.vso-collapse[data-open="true"] { grid-template-rows: 1fr; opacity: 1; visibility: visible; transition: grid-template-rows 220ms var(--ease-snappy), opacity 160ms ease-out, visibility 0s; }
+.vso-collapse > * { min-height: 0; overflow: hidden; }
+
+/* "Just changed": a brief tint that fades, so a new or updated item is easy to find. */
+@keyframes vso-flash { 0%, 15% { background-color: var(--color-primary-100); } 100% { background-color: transparent; } }
+.vso-flash { animation: vso-flash 1300ms ease-out; }
+
+/* Loading placeholders and spinners. */
+@keyframes vso-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+.vso-skeleton { display: block; border-radius: 8px; background: linear-gradient(90deg, var(--color-neutral-100) 25%, var(--color-neutral-50) 50%, var(--color-neutral-100) 75%); background-size: 300% 100%; animation: vso-shimmer 1.5s linear infinite; }
+@keyframes vso-spin { to { transform: rotate(360deg); } }
+.vso-spin { animation: vso-spin 750ms linear infinite; }
+
+/* Toast stack: the row opens room while the toast slides in from the right edge; leaving reverses it a bit faster. */
+@keyframes vso-toast-row-in { from { grid-template-rows: 0fr; } }
+@keyframes vso-toast-in { from { transform: translateX(calc(100% + 24px)); } }
+@keyframes vso-toast-out { to { transform: translateX(calc(100% + 24px)); opacity: 0.4; } }
+.vso-toast-row { display: grid; grid-template-rows: 1fr; animation: vso-toast-row-in 240ms var(--ease-snappy) backwards; }
+.vso-toast-row > div { min-height: 0; }
+.vso-toast { animation: vso-toast-in 280ms var(--ease-snappy) backwards; }
+.vso-toast-row[data-leaving="true"] { grid-template-rows: 0fr; transition: grid-template-rows 160ms var(--ease-snappy) 80ms; }
+.vso-toast-row[data-leaving="true"] .vso-toast { animation: vso-toast-out 180ms var(--ease-snappy) forwards; pointer-events: none; }
+
+@keyframes vso-badge-pop { 40% { transform: scale(1.35); } }
+.vso-badge-pop { animation: vso-badge-pop 280ms var(--ease-snappy); }
+
+/* Content arriving after a load: rows rise 6px one after another (35ms apart). New rows added later rise on their own. */
+@keyframes vso-rise-in { from { opacity: 0; transform: translateY(6px); } }
+.vso-stagger-in > * { animation: vso-rise-in 220ms var(--ease-snappy) backwards; }
+.vso-stagger-in > :nth-child(2) { animation-delay: 35ms; }
+.vso-stagger-in > :nth-child(3) { animation-delay: 70ms; }
+.vso-stagger-in > :nth-child(4) { animation-delay: 105ms; }
+.vso-stagger-in > :nth-child(5) { animation-delay: 140ms; }
+.vso-stagger-in > :nth-child(6) { animation-delay: 175ms; }
+.vso-stagger-in > :nth-child(7) { animation-delay: 210ms; }
+.vso-stagger-in > :nth-child(n+8) { animation-delay: 245ms; }
+
+/* Leaderboard. The daily podium sits on a soft wash of the brand green (it follows the theme); the Saturday edition is a
+   poster: deep green with gold, the same in both themes. Medal finishes are fixed metals, not theme colours. */
+.vso-podium { background: radial-gradient(110% 80% at 50% 0%, var(--color-primary-100) 0%, transparent 72%), var(--color-primary-50); }
+.vso-podium-step { background: linear-gradient(180deg, var(--color-primary-200) 0%, var(--color-primary-100) 100%); }
+.vso-weekly { color: #fff; background: radial-gradient(80% 55% at 50% 0%, rgba(46, 160, 93, .55) 0%, transparent 75%), linear-gradient(180deg, #0d3a23 0%, #08170f 62%, #050b07 100%); }
+.vso-weekly-title { background: linear-gradient(180deg, #fff5c7 0%, #f6cb52 52%, #df9420 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.vso-weekly-row { background: rgba(255, 255, 255, .06); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); }
+.vso-medal-gold { color: #3a2604; background: linear-gradient(155deg, #fbe39a 0%, #eab443 48%, #c27c18 100%); }
+.vso-medal-silver { color: #1d2228; background: linear-gradient(155deg, #f4f6f8 0%, #c5ccd3 50%, #8f98a2 100%); }
+.vso-medal-bronze { color: #3b1d0b; background: linear-gradient(155deg, #f6c4a0 0%, #cf8550 50%, #96532b 100%); }
+/* Full-bleed pages (the leaderboards) fill the whole content area, edge to edge, however short their content. */
+.vso-route-content:has(> .vso-fullbleed) { min-height: 100%; display: flex; flex-direction: column; }
+.vso-fullbleed { flex: 1 0 auto; }
+/* The everyday leaderboard: a bright green stage with frosted podium steps, the list on a sheet below (theme-aware). */
+.vso-board { color: #fff; background: radial-gradient(70% 45% at 50% 0%, rgba(110, 231, 160, .28) 0%, transparent 72%), linear-gradient(180deg, #158a47 0%, #0f6e38 45%, #0a552a 100%); }
+:root[data-theme="dark"] .vso-board { background: radial-gradient(70% 45% at 50% 0%, rgba(74, 222, 128, .18) 0%, transparent 72%), linear-gradient(180deg, #0f5a30 0%, #0a4123 50%, #062b17 100%); }
+.vso-board-step { background: linear-gradient(180deg, rgba(255, 255, 255, .55) 0%, rgba(255, 255, 255, .24) 55%, rgba(255, 255, 255, .1) 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), inset 0 0 0 1px rgba(255, 255, 255, .18); }
+:root[data-theme="dark"] .vso-board-step { background: linear-gradient(180deg, rgba(255, 255, 255, .22) 0%, rgba(255, 255, 255, .1) 55%, rgba(255, 255, 255, .04) 100%); }
+/* The podium and the weekly cards rise in one after another: shown rarely, so they can take their time (still under half a second). */
+@keyframes vso-podium-rise { from { opacity: 0; transform: translateY(18px) scale(.97); } }
+.vso-podium-rise { animation: vso-podium-rise 460ms var(--ease-snappy) backwards; animation-delay: var(--rise-delay, 0ms); }
+.vso-row-enter { animation: vso-rise-in 220ms var(--ease-snappy) backwards; }
+.vso-stagger-in > .vso-flash, .vso-row-enter.vso-flash { animation: vso-flash 1300ms ease-out; }
+/* Button text that changes state (Saving…, Saved) blurs in instead of snapping. */
+@keyframes vso-label-in { from { opacity: 0; filter: blur(2px); } }
+.vso-label-swap { animation: vso-label-in 180ms var(--ease-snappy) backwards; }
+/* A drawer that replaces another one opens without a second slide. */
+[data-enter="false"]:not([data-state="closing"]).vso-backdrop,
+[data-enter="false"]:not([data-state="closing"]) .vso-enter-right { animation: none; }
+
+/* A refused action (e.g. moving a card to Blocked without a blocker) shakes once. */
+@keyframes vso-shake { 20% { transform: translateX(-5px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+.vso-shake { animation: vso-shake 360ms ease-in-out; }
+
+/* Native <dialog> modals grow from the centre with a fading backdrop, and shrink away on close. */
+.vso-dialog[open] { animation: vso-enter-modal 180ms var(--ease-snappy) backwards; }
+.vso-dialog[open]::backdrop { animation: vso-fade-in 200ms ease-out both; }
+.vso-dialog[data-state="closing"] { animation: vso-exit-modal 130ms var(--ease-snappy) forwards; }
+.vso-dialog[data-state="closing"]::backdrop { animation: vso-fade-out 150ms ease-out forwards; }
+
+/* Chat: a reaction dips and pops once; a jumped-to message glows; the new-messages pill rises; a sent message rises from the composer. */
+@keyframes vso-pop { 30% { transform: scale(.88); } 65% { transform: scale(1.12); } }
+.vso-pop { animation: vso-pop 300ms var(--ease-snappy); }
+@keyframes vso-message-flash { 0%, 20% { background-color: var(--color-primary-100); } 100% { background-color: transparent; } }
+.vso-message-flash { animation: vso-message-flash 1200ms ease-out; border-radius: 16px; }
+@keyframes vso-pill-in { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.vso-pill-in { transform: translateX(-50%); animation: vso-pill-in 220ms var(--ease-snappy) both; }
+@keyframes vso-send-rise { from { opacity: 0; transform: translateY(14px) scale(.98); } }
+.vso-send-rise { animation: vso-send-rise 260ms var(--ease-snappy) backwards; }
+
+/* Composer file chips grow in and shrink away; a tiny ring spins while a file uploads. */
+@keyframes vso-chip-in { from { opacity: 0; transform: scale(.94); } }
+@keyframes vso-chip-out { to { opacity: 0; transform: scale(.94); } }
+.vso-chip-in { animation: vso-chip-in 180ms var(--ease-snappy) backwards; }
+.vso-chip-in[data-leaving="true"] { animation: vso-chip-out 120ms ease-out forwards; pointer-events: none; }
+.vso-spinner { display: inline-block; flex: none; border-radius: 999px; border: 1.5px solid currentColor; border-top-color: transparent; animation: vso-spin 750ms linear infinite; }
+/* Avatars fade in once their artwork arrives instead of popping over the placeholder. */
+.vso-avatar-img { transition: opacity 200ms ease-out; }
+.vso-avatar-img[data-loaded="false"] { opacity: 0; }
+
+/* Sidebar: the active pill glides between items (decision 1B); until it is placed the active item paints its own fill. */
+.vso-nav-list:not([data-ready="true"]) [data-nav-active] { background: var(--color-primary-700); }
+@media (min-width: 1024px) {
+  /* Labels fade back in as the rail widens instead of popping in clipped. */
+  .vso-shell-sidebar:not([data-instant="true"]) .vso-nav-label { animation: vso-fade-in 160ms ease-out 70ms backwards; }
+}
+/* Collapsed-rail tooltips: a short delay for the first, instant for the next ones. */
+@keyframes vso-tip-in { from { opacity: 0; transform: translateX(-4px) scale(.97); } }
+.vso-tooltip { animation: vso-tip-in 125ms var(--ease-snappy) both; transform-origin: left center; }
+.vso-tooltip[data-instant="true"] { animation: none; }
+/* Theme icon: the incoming icon turns in while the outgoing one turns away (decision 17B). */
+@keyframes vso-icon-in { from { opacity: 0; transform: rotate(-90deg) scale(.6); } }
+@keyframes vso-icon-out { to { opacity: 0; transform: rotate(90deg) scale(.6); } }
+.vso-icon-swap { grid-area: 1 / 1; }
+.vso-icon-swap[data-state="out"] { opacity: 0; }
+.vso-icon-swap[data-animate="true"][data-state="in"] { animation: vso-icon-in 260ms var(--ease-snappy) both; }
+.vso-icon-swap[data-animate="true"][data-state="out"] { animation: vso-icon-out 200ms var(--ease-snappy) both; }
+
+/* Decision 8C: changed numbers roll digit by digit like an odometer (450 ms); the first value just appears.
+   Each digit keeps a hidden copy of itself in flow so baselines line up with the surrounding text. */
+.vso-odo-cell { position: relative; display: inline-block; clip-path: inset(0 -0.25em); }
+.vso-odo-ghost { visibility: hidden; }
+.vso-odo-col { position: absolute; inset: 0 auto auto 0; display: flex; flex-direction: column; transition: transform 450ms var(--ease-in-out-strong, cubic-bezier(0.77, 0, 0.175, 1)); }
+.vso-odo-col > span { display: block; }
+/* Decision 9B: progress bars grow in when they first appear (650 ms) and slide when a value changes. */
+@keyframes vso-grow { from { width: 0; } }
+.vso-progress { animation: vso-grow 650ms var(--ease-snappy) backwards; transition: width 450ms var(--ease-in-out-strong, cubic-bezier(0.77, 0, 0.175, 1)); }
+/* Decision 2C: content under tabs fades in and slides 10 px from the side of the newly chosen tab (200 ms). */
+@keyframes vso-tab-in { from { opacity: 0; transform: translateX(calc(var(--tab-dir, 0) * 10px)); } }
+.vso-tab-enter { animation: vso-tab-in 200ms var(--ease-snappy) backwards; }
+/* Decision 6C: the bell swings when a new notification arrives while its badge pops (620 ms). */
+@keyframes vso-bell-ring { 15% { transform: rotate(-14deg); } 35% { transform: rotate(11deg); } 55% { transform: rotate(-7deg); } 75% { transform: rotate(4deg); } }
+.vso-bell-ring { animation: vso-bell-ring 620ms ease-out; transform-origin: 50% 2px; }
+
+/* Hover lifts only where a mouse can hover. */
+.vso-lift { transition: transform 180ms var(--ease-snappy), box-shadow 180ms var(--ease-snappy), background-color 150ms ease; }
+@media (hover: hover) and (pointer: fine) {
+  .vso-lift:hover { transform: translateY(-1px); box-shadow: var(--shadow-card-hover); }
+}
+
+@keyframes chat-message-arrive {
+  from { opacity: 0; transform: translateY(7px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.chat-message-arrive { animation: chat-message-arrive 210ms cubic-bezier(.16, 1, .3, 1) both; }
+
+:root {
+  --background: var(--color-canvas);
+  --foreground: var(--color-neutral-900);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-canvas: #0b120e;
+  --color-neutral-0: #111a14;
+  --color-neutral-50: #141e17;
+  --color-neutral-100: #1b2920;
+  --color-neutral-200: #2b4032;
+  --color-neutral-300: #48614f;
+  --color-neutral-400: #8da996;
+  --color-neutral-500: #aec5b5;
+  --color-neutral-600: #c6d7cb;
+  --color-neutral-700: #dce9df;
+  --color-neutral-800: #eaf3ec;
+  --color-neutral-900: #f5faf6;
+  --color-primary-50: #102617;
+  --color-primary-100: #173d25;
+  --color-primary-200: #215934;
+  --color-primary-300: #2e7d48;
+  --color-primary-400: #43ba67;
+  --color-primary-500: #52cf79;
+  --color-primary-600: #6cdb8b;
+  --color-primary-700: #91e6a8;
+  --color-primary-800: #b7f0c6;
+  --color-primary-900: #dcfae4;
+  --color-success-surface: #10301d;
+  --color-success-text: #a7f3d0;
+  --color-warning-surface: #332709;
+  --color-warning-text: #fcd34d;
+  --color-danger-surface: #3c171c;
+  --color-danger-text: #fda4af;
+  --color-info-surface: #102617;
+  --color-info-text: #91e6a8;
+  --color-ai-surface: #102617;
+  --color-ai: #6cdb8b;
+  --color-ai-text: #91e6a8;
+  --shadow-card: 0 0 0 1px rgb(255 255 255 / 0.07), 0 10px 28px -14px rgb(0 0 0 / 0.55);
+  --shadow-card-hover: 0 0 0 1px rgb(255 255 255 / 0.12), 0 14px 32px -12px rgb(0 0 0 / 0.6);
+  --background: var(--color-canvas);
+  --foreground: var(--color-neutral-900);
+}
+
+/* Only surfaces are remapped; text-white stays white on emerald actions. */
+:root[data-theme="dark"] .bg-white { background-color: #111a14; }
+:root[data-theme="dark"] .bg-neutral-900 { background-color: #126b3a; }
+:root[data-theme="dark"] .bg-neutral-800 { background-color: #188647; }
+:root[data-theme="dark"] :is(.bg-primary-600, [class~="bg-[var(--color-primary-600)]"]) { background-color: #198754; }
+:root[data-theme="dark"] :is(.bg-primary-700, [class~="bg-[var(--color-primary-700)]"]) { background-color: #188647; }
+:root[data-theme="dark"] [class~="hover:bg-neutral-800"]:hover { background-color: #188647; }
+:root[data-theme="dark"] [class~="hover:bg-primary-700"]:hover { background-color: #126b3a; }
+:root[data-theme="dark"] [class*="bg-neutral-900/"] { background-color: rgb(0 0 0 / 0.55); }
+:root[data-theme="dark"] .chat-icon:hover,
+:root[data-theme="dark"] .chat-icon-active { background-color: #153d29; color: #6ee7b7; }
+:root[data-theme="dark"] .bg-red-50 { background-color: #3c171c; }
+:root[data-theme="dark"] .text-red-700 { color: #fda4af; }
+:root[data-theme="dark"] .bg-emerald-50 { background-color: #10301d; }
+:root[data-theme="dark"] .text-emerald-700 { color: #a7f3d0; }
+:root[data-theme="dark"] .text-amber-700 { color: #fcd34d; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+@layer components {
+.chat-icon {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  place-items: center;
+  border-radius: 9px;
+  color: #8e8f9a;
+  transition: background-color 150ms, color 150ms, transform 150ms var(--ease-snappy);
+}
+.chat-icon:active { transform: scale(.94); }
+.chat-icon:hover, .chat-icon-active {
+  background: #d1fae5;
+  color: #047857;
+}
+.chat-icon:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+.chat-details { overflow-y: auto; }
+.vso-group-details {
+  position: fixed;
+  inset-block: 0;
+  right: 0;
+  z-index: 20;
+  width: min(320px, 92vw);
+  border-left: 1px solid var(--color-neutral-200);
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateX(100%);
+  transition: transform 260ms var(--ease-drawer);
+}
+.vso-group-details[data-open="true"] {
+  pointer-events: auto;
+  transform: translateX(0);
+}
+@media (min-width: 1024px) {
+  .vso-group-details {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    flex: none;
+    width: 0;
+    min-width: 0;
+    border-left-width: 0;
+    transform: none;
+    transition: width 260ms var(--ease-drawer);
+  }
+  .vso-group-details[data-open="true"] {
+    width: 290px;
+    border-left-width: 1px;
+    transform: none;
+  }
+  .vso-group-details:not([data-open="true"]) { border-left-width: 0; }
+  .vso-group-details > .chat-details { width: 290px; }
+}
+}
+
+/* Tabular numerals on every figure */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Thin scrollbars inside panels */
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-300) transparent;
+}
+
+/* Reduced motion: keep color/opacity cues, drop movement */
+@media (prefers-reduced-motion: reduce) {
+  .vso-tab-indicator { transition-duration: 0.01ms !important; }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) { animation-duration: 0s !important; animation-delay: 0s !important; }
+  .vso-enter-right,
+  .vso-enter-left,
+  .vso-enter-bottom,
+  .vso-enter-modal,
+  .vso-enter-popover,
+  .chat-message-arrive,
+  .vso-backdrop,
+  .vso-fade-enter,
+  .vso-flash,
+  .vso-podium-rise,
+  .vso-skeleton,
+  .vso-spin,
+  .vso-toast-row,
+  .vso-toast,
+  .vso-badge-pop,
+  .vso-stagger-in > *,
+  .vso-row-enter,
+  .vso-label-swap,
+  .vso-shake,
+  .vso-pop,
+  .vso-message-flash,
+  .vso-pill-in,
+  .vso-send-rise,
+  .vso-dialog,
+  .vso-dialog::backdrop,
+  .vso-chip-in,
+  .vso-tooltip,
+  .vso-icon-swap,
+  .vso-progress,
+  .vso-tab-enter,
+  .vso-bell-ring,
+  .vso-spinner,
+  .vso-stagger > * {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Auth screens (sign-in, setup, invitations): the frame settles in, the form shakes on an error, content swaps fade. */
+@keyframes vso-auth-in { from { opacity: 0; transform: scale(.985); } }
+@keyframes vso-auth-rise { from { opacity: 0; transform: translateY(8px); } }
+@keyframes vso-auth-shake { 20% { transform: translateX(-7px); } 40% { transform: translateX(7px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+.vso-auth-frame { animation: vso-auth-in 600ms cubic-bezier(.22, 1, .36, 1) both; }
+.vso-auth-rise { animation: vso-auth-rise 260ms cubic-bezier(.22, 1, .36, 1) both; }
+.vso-auth-shake { animation: vso-auth-shake 400ms ease-out; }
+
+/* Role pills: one soft gradient per role family (People & access, member lists). */
+.vso-role { border: 1px solid transparent; }
+.vso-role-admin { background-image: linear-gradient(135deg, #f3f0ff, #e1dbff); border-color: #d4cbfb; color: #3c3489; }
+.vso-role-head { background-image: linear-gradient(135deg, #ecfbe9, #cdf0d2); border-color: #b7e3c0; color: #14532d; }
+.vso-role-ops { background-image: linear-gradient(135deg, #fff7e8, #fde3b5); border-color: #f6d391; color: #7a4508; }
+.vso-role-review { background-image: linear-gradient(135deg, #eef6ff, #d3e6fb); border-color: #bcd7f5; color: #0c447c; }
+.vso-role-contrib { background-image: linear-gradient(135deg, #e9fbf6, #c8efe2); border-color: #a9e2cf; color: #085041; }
+.vso-role-learn { background-image: linear-gradient(135deg, #fdf0f5, #f6d5e2); border-color: #efbfd2; color: #72243e; }
+.vso-role-other { background-image: linear-gradient(135deg, #f7f7f6, #e9e8e5); border-color: #dddbd6; color: #444441; }
+.vso-role:hover { filter: saturate(1.15) brightness(.99); }
+:root[data-theme="dark"] .vso-role-admin { background-image: linear-gradient(135deg, #2b2650, #3c3489); border-color: #534ab7; color: #e6e2ff; }
+:root[data-theme="dark"] .vso-role-head { background-image: linear-gradient(135deg, #12351f, #1b5631); border-color: #2c7a48; color: #d6f5de; }
+:root[data-theme="dark"] .vso-role-ops { background-image: linear-gradient(135deg, #3d2606, #5c3a0b); border-color: #85540f; color: #fde3b5; }
+:root[data-theme="dark"] .vso-role-review { background-image: linear-gradient(135deg, #0b2a4a, #12406d); border-color: #185fa5; color: #d3e6fb; }
+:root[data-theme="dark"] .vso-role-contrib { background-image: linear-gradient(135deg, #06342b, #0b4f41); border-color: #0f6e56; color: #c8efe2; }
+:root[data-theme="dark"] .vso-role-learn { background-image: linear-gradient(135deg, #43172a, #66223e); border-color: #993556; color: #f6d5e2; }
+:root[data-theme="dark"] .vso-role-other { background-image: linear-gradient(135deg, #262624, #353533); border-color: #4a4a47; color: #e2e1dc; }
+
+/* Connect Claude: a code well with fixed colors (the theme remaps neutral surfaces), key tiles, and a soft glow behind dithers. */
+.vso-code-well { background: #0f1713; color: #e3f1e7; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06); }
+.vso-code-well-key { background: linear-gradient(135deg, #0f1713, #13261b); box-shadow: inset 0 0 0 1px rgb(110 231 157 / 0.25); color: #bdf5cf; }
+.vso-code-well-button { color: #c7dccd; background: rgb(255 255 255 / 0.06); }
+.vso-code-well-button:hover { color: #ffffff; background: rgb(255 255 255 / 0.12); }
+:root[data-theme="dark"] .vso-code-well { background: #070c09; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.09); }
+:root[data-theme="dark"] .vso-code-well-key { background: linear-gradient(135deg, #070c09, #0d2015); }
+.vso-key-tile { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25), 0 6px 14px -6px rgb(16 24 40 / 0.35); }
+.vso-key-tile-0 { background-image: linear-gradient(135deg, #34d399, #0f766e); }
+.vso-key-tile-1 { background-image: linear-gradient(135deg, #60a5fa, #4338ca); }
+.vso-key-tile-2 { background-image: linear-gradient(135deg, #fbbf24, #c2410c); }
+.vso-key-tile-3 { background-image: linear-gradient(135deg, #f472b6, #7e22ce); }
+.vso-key-tile-4 { background-image: linear-gradient(135deg, #2dd4bf, #0369a1); }
+.vso-connect-glow { background: radial-gradient(70% 90% at 50% 100%, var(--color-primary-100), transparent 70%), radial-gradient(45% 60% at 12% 0%, rgb(56 189 248 / 0.14), transparent 70%), radial-gradient(45% 60% at 88% 10%, rgb(250 204 21 / 0.12), transparent 70%); }
+
+/* Empty-state kit (components/ui/empty-state.tsx): dither palettes per tone, icon tiles, and the glow behind page empties. */
+:root {
+  --vso-dither-green-1: #dcf3e2; --vso-dither-green-2: #b8e5c6; --vso-dither-green-3: #8bd1a2;
+  --vso-dither-blue-1: #dfeafd; --vso-dither-blue-2: #c3d8fb; --vso-dither-blue-3: #9cbef7;
+  --vso-dither-amber-1: #fdf0cf; --vso-dither-amber-2: #fbe0a0; --vso-dither-amber-3: #f7c96a;
+  --vso-dither-violet-1: #ece8fd; --vso-dither-violet-2: #d9d1fb; --vso-dither-violet-3: #bfb1f7;
+  --vso-dither-teal-1: #d5f6ef; --vso-dither-teal-2: #a8ece0; --vso-dither-teal-3: #6fdccb;
+  --vso-dither-red-1: #fde3e1; --vso-dither-red-2: #fbc6c1; --vso-dither-red-3: #f69f97;
+}
+:root[data-theme="dark"] {
+  --vso-dither-green-1: #12301e; --vso-dither-green-2: #19462b; --vso-dither-green-3: #22603b;
+  --vso-dither-blue-1: #0f2340; --vso-dither-blue-2: #15335c; --vso-dither-blue-3: #1d4884;
+  --vso-dither-amber-1: #2f230a; --vso-dither-amber-2: #47340c; --vso-dither-amber-3: #664a10;
+  --vso-dither-violet-1: #1f1942; --vso-dither-violet-2: #2c235e; --vso-dither-violet-3: #3e3285;
+  --vso-dither-teal-1: #0a2d29; --vso-dither-teal-2: #0e423c; --vso-dither-teal-3: #135b53;
+  --vso-dither-red-1: #351519; --vso-dither-red-2: #4f1d23; --vso-dither-red-3: #70272f;
+}
+.vso-tile { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25), 0 6px 14px -6px rgb(16 24 40 / 0.35); }
+.vso-tile-green { background-image: linear-gradient(135deg, #34d399, #0f766e); }
+.vso-tile-blue { background-image: linear-gradient(135deg, #60a5fa, #4338ca); }
+.vso-tile-amber { background-image: linear-gradient(135deg, #fbbf24, #c2410c); }
+.vso-tile-violet { background-image: linear-gradient(135deg, #a78bfa, #6d28d9); }
+.vso-tile-teal { background-image: linear-gradient(135deg, #2dd4bf, #0369a1); }
+.vso-tile-red { background-image: linear-gradient(135deg, #fb7185, #be123c); }
+.vso-empty-glow { --vso-glow: var(--vso-dither-green-1); background: radial-gradient(70% 90% at 50% 0%, var(--vso-glow), transparent 72%), radial-gradient(45% 60% at 10% 0%, rgb(56 189 248 / 0.12), transparent 70%), radial-gradient(45% 60% at 90% 8%, rgb(250 204 21 / 0.1), transparent 70%); }
+.vso-empty-glow[data-tone="blue"] { --vso-glow: var(--vso-dither-blue-1); }
+.vso-empty-glow[data-tone="amber"] { --vso-glow: var(--vso-dither-amber-1); }
+.vso-empty-glow[data-tone="violet"] { --vso-glow: var(--vso-dither-violet-1); }
+.vso-empty-glow[data-tone="teal"] { --vso-glow: var(--vso-dither-teal-1); }
+.vso-empty-glow[data-tone="red"] { --vso-glow: var(--vso-dither-red-1); }
+.vso-empty-card-dither { -webkit-mask-image: radial-gradient(50% 55% at 50% 38%, #000 22%, transparent 74%); mask-image: radial-gradient(50% 55% at 50% 38%, #000 22%, transparent 74%); }
+/* Scrolling tab and chip rows fade at the edge that has more to show. */
+.vso-tabs[data-fade="right"] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent); }
+.vso-tabs[data-fade="left"] { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 32px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 32px), transparent); }
+.vso-tabs[data-fade="both"] { -webkit-mask-image: linear-gradient(to right, transparent, #000 32px, #000 calc(100% - 32px), transparent); mask-image: linear-gradient(to right, transparent, #000 32px, #000 calc(100% - 32px), transparent); }
+/* Stat cards: a coloured dither always sits in the corner; hover spreads it (Dither tweens its reach) and brightens it. */
+.vso-stat-wash { opacity: 0.72; transition: opacity 320ms cubic-bezier(0.23, 1, 0.32, 1); -webkit-mask-image: radial-gradient(135% 125% at 100% 0%, #000 34%, transparent 82%); mask-image: radial-gradient(135% 125% at 100% 0%, #000 34%, transparent 82%); }
+.vso-stat:hover .vso-stat-wash, .vso-stat:focus-visible .vso-stat-wash { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .vso-stat-wash { transition: none; } }
+.vso-stat-icon-blue { background: var(--vso-dither-blue-1); color: #1d4ed8; }
+.vso-stat-icon-teal { background: var(--vso-dither-teal-1); color: #0f766e; }
+:root[data-theme="dark"] .vso-stat-icon-blue { color: #93c5fd; }
+:root[data-theme="dark"] .vso-stat-icon-teal { color: #5eead4; }
+/* Focus dial: knobs spring into each detent, arcs follow, the centre dot pops on every step. */
+.vso-dial-knob { transition: transform 140ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+.vso-dial-knob-ring { fill: var(--color-neutral-0); stroke: #0f9f6e; stroke-width: 3; transition: r 150ms cubic-bezier(0.23, 1, 0.32, 1), stroke-width 150ms; filter: drop-shadow(0 2px 4px rgb(16 24 40 / 0.25)); }
+.vso-dial-knob-ring.is-active { stroke-width: 4; }
+.is-hours .vso-dial-knob-ring { stroke: #4f46e5; }
+.vso-dial-knob-dot { fill: #0f9f6e; transform-box: fill-box; transform-origin: center; animation: vso-dial-pop 220ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+.is-hours .vso-dial-knob-dot { fill: #4f46e5; }
+.vso-dial-arc { transition: stroke-dasharray 160ms cubic-bezier(0.23, 1, 0.32, 1), opacity 120ms; }
+@keyframes vso-dial-pop { from { transform: scale(1.7); } to { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .vso-dial-knob, .vso-dial-arc, .vso-dial-knob-ring { transition: none; } .vso-dial-knob-dot { animation: none; } }
+/* Sidebar link list: a bottom fade says more links sit below on short screens. */
+.vso-nav-scroll[data-more="true"] { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent); }
+/* New task popup header: a drifting dither that fades out toward the title on the left. */
+.vso-dialog-glow { background: radial-gradient(80% 160% at 100% 0%, var(--vso-dither-green-1), transparent 70%); }
+.vso-dialog-dither { -webkit-mask-image: linear-gradient(to left, #000 35%, transparent 92%); mask-image: linear-gradient(to left, #000 35%, transparent 92%); }
+
+/* Calendar: one tint per event colour. Blocks and chips read --cal-bg / --cal-fg / --cal-bar. */
+.vso-cal-green { --cal-bg: #e6f5ec; --cal-fg: #0d4a2c; --cal-bar: #16a34a; }
+.vso-cal-blue { --cal-bg: #e8eefc; --cal-fg: #1e3a8a; --cal-bar: #3b5bdb; }
+.vso-cal-amber { --cal-bg: #fcf1df; --cal-fg: #78350f; --cal-bar: #d97706; }
+.vso-cal-violet { --cal-bg: #efe9fc; --cal-fg: #4c1d95; --cal-bar: #7c3aed; }
+.vso-cal-teal { --cal-bg: #e2f4f3; --cal-fg: #134e4a; --cal-bar: #0d9488; }
+.vso-cal-red { --cal-bg: #fce9ec; --cal-fg: #881337; --cal-bar: #e11d48; }
+.vso-cal-neutral { --cal-bg: #eff1ef; --cal-fg: #2f3732; --cal-bar: #77807a; }
+:root[data-theme="dark"] .vso-cal-green { --cal-bg: #133524; --cal-fg: #bdf2d3; --cal-bar: #34d399; }
+:root[data-theme="dark"] .vso-cal-blue { --cal-bg: #1a2648; --cal-fg: #c7d6ff; --cal-bar: #7b9cff; }
+:root[data-theme="dark"] .vso-cal-amber { --cal-bg: #3a2810; --cal-fg: #fde3b3; --cal-bar: #f5a524; }
+:root[data-theme="dark"] .vso-cal-violet { --cal-bg: #2b1f4a; --cal-fg: #ddd0ff; --cal-bar: #a78bfa; }
+:root[data-theme="dark"] .vso-cal-teal { --cal-bg: #10332f; --cal-fg: #bff0e9; --cal-bar: #2dd4bf; }
+:root[data-theme="dark"] .vso-cal-red { --cal-bg: #3f1520; --cal-fg: #ffc9d2; --cal-bar: #fb7185; }
+:root[data-theme="dark"] .vso-cal-neutral { --cal-bg: #232a25; --cal-fg: #d7dcd8; --cal-bar: #8a948d; }
+.vso-cal-block { background-color: var(--cal-bg); color: var(--cal-fg); box-shadow: inset 3px 0 0 var(--cal-bar); }
+.vso-cal-dot { background-color: var(--cal-bar); }
+/* Maybe or not yet answered: hatched. Declined: faded and struck through. */
+.vso-cal-tentative { background-image: repeating-linear-gradient(-45deg, transparent 0 5px, color-mix(in srgb, var(--cal-bar) 16%, transparent) 5px 10px); }
+.vso-cal-declined { opacity: .55; }
+.vso-cal-declined .vso-cal-title { text-decoration: line-through; }
+/* Week and day grid: hour lines, the "now" line, and the drag selection. */
+.vso-cal-hours { background-image: linear-gradient(to bottom, var(--color-neutral-100) 1px, transparent 1px); background-size: 100% var(--cal-hour, 48px); }
+.vso-cal-now { position: absolute; left: 0; right: 0; height: 2px; background: #e11d48; pointer-events: none; z-index: 5; }
+.vso-cal-now::before { content: ""; position: absolute; left: -5px; top: -4px; width: 10px; height: 10px; border-radius: 9999px; background: #e11d48; }
+.vso-cal-selection { background: color-mix(in srgb, var(--color-primary-500) 16%, transparent); border: 1.5px dashed var(--color-primary-500); border-radius: 10px; pointer-events: none; z-index: 6; }
+.vso-cal-dragging { opacity: .85; box-shadow: 0 10px 24px -8px rgb(0 0 0 / .35), inset 3px 0 0 var(--cal-bar); z-index: 7; cursor: grabbing; }
+.vso-cal-today { background: var(--color-primary-700); color: #fff; }
+.vso-cal-layer { border: 1px dashed var(--color-neutral-300); background: var(--color-neutral-50); color: var(--color-neutral-600); }
+@media (prefers-reduced-motion: reduce) { .vso-cal-block { transition: none !important; } }
+.vso-cal-loading { animation: vso-cal-loading 1.1s var(--ease-snappy, ease-in-out) infinite; }
+@keyframes vso-cal-loading { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
+@media (prefers-reduced-motion: reduce) { .vso-cal-loading { animation: none; width: 100%; opacity: .5; } }
+
+/* New messages as a MacBook-style notch (components/shell/message-island.tsx). */
+.vso-island { box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.5); }
+:root[data-theme="dark"] .vso-island { box-shadow: 0 0 0 1px rgb(255 255 255 / 0.1), 0 12px 32px -12px rgb(0 0 0 / 0.7); }
+@keyframes vso-island-arrive { from { opacity: 0; transform: translateY(-10px) scale(0.9); } to { opacity: 1; transform: none; } }
+.vso-island-arrive { animation: vso-island-arrive 240ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+@media (prefers-reduced-motion: reduce) { .vso-island-arrive { animation: none; } }
+
+/* 3D pop cards (components/sales/pop-card.tsx): the card lifts and tilts toward the cursor, a green glow spreads
+   behind it, a sheen sweeps across once, and the avatar pops out in front. Transform and opacity only. */
+.vso-pop-wrap { position: relative; --pop-rx: 0deg; --pop-ry: 0deg; --pop-x: 50%; --pop-y: 30%; }
+.vso-pop-glow { position: absolute; inset: -14px; border-radius: 28px; pointer-events: none; opacity: 0; transition: opacity 260ms cubic-bezier(0.23, 1, 0.32, 1);
+  background: radial-gradient(55% 55% at var(--pop-x) var(--pop-y), color-mix(in srgb, var(--color-primary-500) 24%, transparent), transparent 70%); }
+.vso-pop { position: relative; transform-style: preserve-3d; transform: perspective(900px) rotateX(var(--pop-rx)) rotateY(var(--pop-ry));
+  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 220ms cubic-bezier(0.23, 1, 0.32, 1); }
+.vso-pop::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0;
+  background: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 0.5) 50%, transparent 62%); background-size: 260% 100%; background-position: 120% 0; }
+.vso-pop-wrap[data-hover] .vso-pop-glow { opacity: 1; }
+.vso-pop-wrap[data-hover] .vso-pop { transform: perspective(900px) rotateX(var(--pop-rx)) rotateY(var(--pop-ry)) translateY(-4px) scale(1.012);
+  box-shadow: 0 26px 48px -22px rgb(10 30 18 / 0.38), 0 10px 22px -12px rgb(10 30 18 / 0.22); }
+.vso-pop-wrap[data-hover] .vso-pop::after { animation: vso-pop-sheen 720ms cubic-bezier(0.23, 1, 0.32, 1) 60ms both; }
+@keyframes vso-pop-sheen { from { opacity: 0; background-position: 120% 0; } 30% { opacity: 1; } to { opacity: 0; background-position: -40% 0; } }
+.vso-pop-avatar { background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700)); box-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
+  transform: translateZ(0); transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 260ms cubic-bezier(0.23, 1, 0.32, 1); }
+.vso-pop-wrap[data-hover] .vso-pop-avatar { transform: translateZ(40px) translateY(-6px) scale(1.16) rotate(-4deg);
+  box-shadow: 0 22px 30px -12px rgb(10 30 18 / 0.45), 0 0 0 3px #fff; }
+:root[data-theme="dark"] .vso-pop-wrap[data-hover] .vso-pop { box-shadow: 0 26px 48px -22px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.08); }
+:root[data-theme="dark"] .vso-pop::after { background: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 0.14) 50%, transparent 62%); }
+:root[data-theme="dark"] .vso-pop-wrap[data-hover] .vso-pop-avatar { box-shadow: 0 22px 30px -12px rgb(0 0 0 / 0.6), 0 0 0 3px #111a14; }
+@media (prefers-reduced-motion: reduce) {
+  .vso-pop, .vso-pop-avatar { transition: box-shadow 200ms; }
+  .vso-pop-wrap[data-hover] .vso-pop, .vso-pop-wrap[data-hover] .vso-pop-avatar { transform: none; }
+  .vso-pop-wrap[data-hover] .vso-pop::after { animation: none; }
+}
